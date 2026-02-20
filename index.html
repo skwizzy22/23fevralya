@@ -289,10 +289,11 @@
             font-size: 18px;
             margin: 15px 0;
             line-height: 1.6;
-            padding: 10px;
+            padding: 15px;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 8px;
             font-style: italic;
+            border-left: 3px solid #b8860b;
         }
 
         .moderator-actions {
@@ -369,6 +370,9 @@
             line-height: 1.6;
             color: #e8d9b5;
             margin: 15px 0;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
         }
 
         @keyframes fadeIn {
@@ -465,15 +469,13 @@
             border-top: 1px solid #b8860b;
         }
 
-        .debug-info {
-            background: rgba(0, 0, 0, 0.5);
+        .moderator-email {
             color: #ffd700;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            font-family: monospace;
-            font-size: 12px;
-            display: none;
+            font-size: 16px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid #b8860b;
         }
     </style>
 </head>
@@ -492,6 +494,7 @@
             <h2>Слава защитникам Отечества!</h2>
         </div>
 
+        <!-- Форма отправки поздравления - БЕЗ ВОИНСКИХ ЗВАНИЙ -->
         <div class="greeting-form">
             <div class="form-title">Отправить поздравление</div>
             <form id="greetingForm">
@@ -511,20 +514,22 @@
             </form>
         </div>
 
+        <!-- Одобренные поздравления -->
         <h2 style="margin: 40px 0 20px; text-align: center;">Одобренные поздравления</h2>
         <div class="approved-greetings" id="approvedGreetings">
             <p style="text-align: center; color: #808080; grid-column: 1/-1;">Загрузка...</p>
         </div>
 
+        <!-- Панель модератора -->
         <div class="moderator-panel" id="moderatorPanel" style="display: none;">
             <div class="moderator-header">
                 <h3>⚡ Панель модератора ⚡</h3>
-                <span style="color: #ffd700;" id="moderatorEmail"></span>
+                <span class="moderator-email" id="moderatorEmail"></span>
             </div>
             <div id="pendingGreetings"></div>
-            <div id="moderatorDebug" class="debug-info"></div>
         </div>
 
+        <!-- Модальное окно входа -->
         <div class="modal" id="loginModal">
             <div class="modal-content">
                 <span class="close-modal" onclick="hideLoginModal()">&times;</span>
@@ -550,6 +555,7 @@
     </div>
 
     <script>
+        // Конфигурация Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyBdmfklzGC_bx8F_0gNvHHzSWpZbKAk3YU",
             authDomain: "new-fad3e.firebaseapp.com",
@@ -566,7 +572,7 @@
 
         let currentUser = null;
 
-        // Функция для показа уведомлений
+        // Показать уведомление
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
             notification.className = 'notification';
@@ -600,8 +606,6 @@
         // Загрузка одобренных поздравлений
         async function loadApprovedGreetings() {
             try {
-                console.log('Загрузка одобренных поздравлений...');
-                
                 const snapshot = await db.collection('greetings')
                     .where('status', '==', 'approved')
                     .orderBy('createdAt', 'desc')
@@ -615,11 +619,8 @@
                     return;
                 }
                 
-                let count = 0;
                 snapshot.forEach(doc => {
                     const data = doc.data();
-                    console.log('Загружено поздравление:', data);
-                    
                     const card = document.createElement('div');
                     card.className = 'approved-card';
                     
@@ -639,7 +640,7 @@
                     }
                     
                     card.innerHTML = `
-                        <h4>${data.sender || 'Поздравляющий'}</h4>
+                        <h4>От: ${data.sender || 'Поздравляющий'}</h4>
                         <div class="greeting-meta">
                             <span>🎖️ Кому: ${data.recipient || 'Защитникам'}</span>
                             <span>📅 ${dateText}</span>
@@ -647,15 +648,12 @@
                         <div class="greeting-text">${data.text || 'С праздником!'}</div>
                     `;
                     container.appendChild(card);
-                    count++;
                 });
-                
-                console.log(`Загружено ${count} одобренных поздравлений`);
                 
             } catch (error) {
                 console.error('Ошибка загрузки одобренных:', error);
                 document.getElementById('approvedGreetings').innerHTML = 
-                    '<p style="color: #c62828; grid-column: 1/-1;">Ошибка загрузки поздравлений. Проверьте подключение к Firebase.</p>';
+                    '<p style="color: #c62828; grid-column: 1/-1;">Ошибка загрузки поздравлений</p>';
             }
         }
 
@@ -664,8 +662,6 @@
             if (!currentUser) return;
             
             try {
-                console.log('Загрузка ожидающих модерации...');
-                
                 const snapshot = await db.collection('greetings')
                     .where('status', '==', 'pending')
                     .orderBy('createdAt', 'desc')
@@ -679,11 +675,8 @@
                     return;
                 }
                 
-                let count = 0;
                 snapshot.forEach(doc => {
                     const data = doc.data();
-                    console.log('Заявка на модерацию:', doc.id, data);
-                    
                     const card = document.createElement('div');
                     card.className = 'greeting-card pending';
                     card.id = `greeting-${doc.id}`;
@@ -716,10 +709,7 @@
                         </div>
                     `;
                     container.appendChild(card);
-                    count++;
                 });
-                
-                console.log(`Загружено ${count} заявок на модерацию`);
                 
             } catch (error) {
                 console.error('Ошибка загрузки заявок:', error);
@@ -736,8 +726,6 @@
             }
             
             try {
-                console.log(`Модерация ${id}: ${status}`);
-                
                 await db.collection('greetings').doc(id).update({
                     status: status,
                     moderatedBy: currentUser.email,
@@ -793,10 +781,7 @@
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
                 
-                console.log('Отправка данных:', greetingData);
-                
-                const docRef = await db.collection('greetings').add(greetingData);
-                console.log('Документ создан с ID:', docRef.id);
+                await db.collection('greetings').add(greetingData);
                 
                 alert('Поздравление отправлено на модерацию!');
                 e.target.reset();
@@ -869,13 +854,7 @@
 
         // Загрузка данных при старте
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('Страница загружена, инициализация...');
             loadApprovedGreetings();
-            
-            // Проверка подключения к Firebase
-            db.collection('greetings').limit(1).get()
-                .then(() => console.log('Подключение к Firebase работает'))
-                .catch(error => console.error('Ошибка подключения к Firebase:', error));
         });
 
         // Экспорт функций
