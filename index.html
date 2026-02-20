@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>С 23 февраля | Защитникам Отечества</title>
+    <title>С 23 февраля! 🇷🇺 Военные поздравления</title>
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -14,276 +14,363 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        :root {
-            --army-green: #2b4b2b;
-            --army-dark: #1a2f1a;
-            --army-olive: #4a674a;
-            --sand: #9b8a6b;
-            --steel: #4a5b6e;
-            --gold: #c4a55c;
-            --blood: #8b2c2c;
-            --camouflage-1: #3d523d;
-            --camouflage-2: #5d7052;
-            --camouflage-3: #7f8c6b;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', 'Arial', sans-serif;
-            background: #1a2f1a;
+            background: linear-gradient(135deg, #2a5a3a 0%, #1a3a2a 100%);
             min-height: 100vh;
-            color: #e8e0c9;
-            position: relative;
-            overflow-x: hidden;
+            color: #e8d9b5;
         }
 
-        body::before {
-            content: '';
+        /* Военный паттерн */
+        .camouflage {
+            background-image: 
+                radial-gradient(circle at 30% 40%, #3a6b4a 8px, transparent 8px),
+                radial-gradient(circle at 70% 60%, #4a7b5a 12px, transparent 12px),
+                radial-gradient(circle at 40% 80%, #2a4a32 15px, transparent 15px),
+                linear-gradient(45deg, #2d5a3d 25%, #1f4a2f 25%, #1f4a2f 50%, #2d5a3d 50%, #2d5a3d 75%, #1f4a2f 75%, #1f4a2f 100%);
+            background-size: 80px 80px, 100px 100px, 120px 120px, 40px 40px;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-image: 
-                radial-gradient(circle at 30% 40%, var(--camouflage-1) 8%, transparent 8%),
-                radial-gradient(circle at 70% 60%, var(--camouflage-2) 12%, transparent 12%),
-                radial-gradient(circle at 20% 80%, var(--camouflage-3) 6%, transparent 6%),
-                radial-gradient(circle at 85% 25%, var(--camouflage-1) 10%, transparent 10%),
-                radial-gradient(circle at 45% 70%, var(--camouflage-2) 15%, transparent 15%),
-                radial-gradient(circle at 15% 30%, var(--camouflage-3) 7%, transparent 7%),
-                linear-gradient(45deg, var(--camouflage-1) 0%, var(--camouflage-2) 30%, var(--camouflage-3) 70%);
-            background-size: 250px 250px;
+            z-index: -2;
             opacity: 0.3;
+        }
+
+        /* Звезды по углам */
+        .star-decoration {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
             z-index: -1;
         }
 
-        header {
-            background: linear-gradient(135deg, var(--army-dark) 0%, var(--army-green) 100%);
-            color: var(--gold);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 3px solid var(--gold);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            position: relative;
-            z-index: 10;
+        .star-decoration::before,
+        .star-decoration::after {
+            content: "★";
+            position: absolute;
+            font-size: 60px;
+            color: rgba(255, 215, 0, 0.2);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
         }
 
-        header h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            text-shadow: 2px 2px 0 var(--army-dark);
-            display: flex;
-            align-items: center;
-            gap: 15px;
+        .star-decoration::before {
+            top: 20px;
+            left: 20px;
+            transform: rotate(-15deg);
         }
 
-        header h1::before, header h1::after {
-            content: '⭐';
-            font-size: 2.2rem;
-            filter: drop-shadow(0 0 5px var(--gold));
+        .star-decoration::after {
+            bottom: 20px;
+            right: 20px;
+            font-size: 80px;
+            transform: rotate(15deg);
         }
 
-        nav {
-            display: flex;
-            gap: 15px;
-        }
-
-        nav a {
-            color: #e8e0c9;
-            text-decoration: none;
-            padding: 8px 25px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.9rem;
-            border: 2px solid transparent;
-            background: rgba(0, 0, 0, 0.3);
-        }
-
-        nav a:hover {
-            border-color: var(--gold);
-            background: rgba(196, 165, 92, 0.2);
-            transform: translateY(-2px);
-        }
-
-        nav a.active {
-            background: var(--gold);
-            color: var(--army-dark);
-            border-color: var(--gold);
-        }
-
-        main {
+        .container {
             max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 20px;
-        }
-
-        section {
-            background: rgba(26, 47, 26, 0.9);
-            backdrop-filter: blur(5px);
-            border: 2px solid var(--gold);
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin: 0 auto;
+            padding: 20px;
             position: relative;
+            z-index: 1;
         }
 
-        section::before {
-            content: '';
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            width: 30px;
-            height: 30px;
-            border-top: 3px solid var(--gold);
-            border-left: 3px solid var(--gold);
-        }
-
-        section::after {
-            content: '';
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            width: 30px;
-            height: 30px;
-            border-bottom: 3px solid var(--gold);
-            border-right: 3px solid var(--gold);
-        }
-
-        h2 {
-            color: var(--gold);
-            margin-bottom: 2rem;
-            font-size: 2rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            border-bottom: 2px solid var(--gold);
-            padding-bottom: 0.5rem;
-            display: inline-block;
-        }
-
-        .search-section {
-            background: linear-gradient(135deg, rgba(26, 47, 26, 0.95), rgba(43, 75, 43, 0.95));
-            border-color: var(--gold);
-        }
-
-        .search-section input {
-            flex: 1;
-            min-width: 250px;
-            padding: 15px 25px;
-            border: 2px solid var(--sand);
-            background: rgba(0, 0, 0, 0.5);
-            color: #e8e0c9;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-
-        .search-section input:focus {
-            outline: none;
-            border-color: var(--gold);
-            background: rgba(0, 0, 0, 0.7);
-        }
-
-        button {
-            background: transparent;
-            color: var(--gold);
-            border: 2px solid var(--gold);
-            padding: 15px 35px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        /* Шапка с военной символикой */
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(30, 40, 30, 0.8);
+            border-radius: 15px;
+            border: 2px solid #b8860b;
+            margin-bottom: 30px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
             position: relative;
             overflow: hidden;
         }
 
-        button:hover {
-            background: var(--gold);
-            color: var(--army-dark);
-            box-shadow: 0 0 20px var(--gold);
+        .header::before {
+            content: "⚔️";
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 40px;
+            opacity: 0.3;
+        }
+
+        .header::after {
+            content: "⚔️";
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%) scaleX(-1);
+            font-size: 40px;
+            opacity: 0.3;
+        }
+
+        h1 {
+            font-size: 48px;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            text-shadow: 3px 3px 0 #3a2a1a, 5px 5px 0 #b8860b;
+            color: #ffd700;
+            margin-bottom: 10px;
+            font-family: 'Impact', 'Arial Black', sans-serif;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #c0c0c0;
+            text-shadow: 2px 2px 0 #2a3a2a;
+        }
+
+        /* Кнопки авторизации */
+        .auth-section {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn-auth {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #3a5a3a, #1a3a1a);
+            border: 2px solid #b8860b;
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-auth:hover {
+            background: linear-gradient(135deg, #4a6a4a, #2a4a2a);
+            border-color: #ffd700;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Форма отправки поздравления */
+        .greeting-form {
+            background: rgba(20, 30, 20, 0.9);
+            border: 2px solid #b8860b;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-title {
+            font-size: 28px;
+            color: #ffd700;
+            margin-bottom: 25px;
+            text-align: center;
+            border-bottom: 2px solid #b8860b;
+            padding-bottom: 15px;
         }
 
         .form-group {
-            margin-bottom: 2rem;
+            margin-bottom: 20px;
         }
 
-        .form-group label {
+        label {
             display: block;
-            margin-bottom: 0.8rem;
-            font-weight: 600;
-            color: var(--gold);
-            font-size: 1.1rem;
-            letter-spacing: 1px;
+            margin-bottom: 8px;
+            color: #c0c0c0;
+            font-weight: bold;
             text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 1px;
         }
 
-        .form-group input, .form-group textarea {
+        input, textarea, select {
             width: 100%;
-            padding: 15px 20px;
-            border: 2px solid var(--sand);
-            background: rgba(0, 0, 0, 0.5);
-            color: #e8e0c9;
-            font-size: 1rem;
+            padding: 12px 15px;
+            background: rgba(10, 20, 10, 0.8);
+            border: 2px solid #5a7a5a;
+            color: #e8d9b5;
+            border-radius: 8px;
+            font-size: 16px;
             transition: all 0.3s;
         }
 
-        .form-group input:focus, .form-group textarea:focus {
+        input:focus, textarea:focus, select:focus {
             outline: none;
-            border-color: var(--gold);
-            background: rgba(0, 0, 0, 0.7);
+            border-color: #b8860b;
+            box-shadow: 0 0 15px rgba(184, 134, 11, 0.5);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #b8860b, #8b6508);
+            color: #1a2a1a;
+            font-weight: bold;
+            font-size: 20px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: all 0.3s;
+            border: 2px solid #ffd700;
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #daa520, #b8860b);
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Панель модерации */
+        .moderator-panel {
+            background: rgba(10, 20, 10, 0.95);
+            border: 3px solid #b8860b;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+        }
+
+        .moderator-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #b8860b;
+        }
+
+        .moderator-header h3 {
+            font-size: 28px;
+            color: #ffd700;
+            text-transform: uppercase;
         }
 
         .greeting-card {
-            background: linear-gradient(135deg, var(--army-dark), var(--army-green));
-            border: 2px solid var(--gold);
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-            transition: all 0.3s ease;
+            background: rgba(30, 40, 30, 0.8);
+            border: 2px solid #5a7a5a;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
         }
 
-        .greeting-card:hover {
-            transform: translateX(10px);
-            border-color: var(--gold);
-            box-shadow: -5px 5px 20px rgba(0,0,0,0.5);
+        .greeting-card.pending {
+            border-left: 10px solid #b8860b;
         }
 
-        .greeting-card .from {
-            color: var(--sand);
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
+        .greeting-card.approved {
+            border-left: 10px solid #2e7d32;
+            opacity: 0.8;
+        }
+
+        .greeting-card.rejected {
+            border-left: 10px solid #c62828;
+            opacity: 0.6;
+        }
+
+        .greeting-card h4 {
+            font-size: 20px;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .greeting-meta {
+            display: flex;
+            gap: 20px;
+            color: #a0a0a0;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .greeting-text {
+            font-size: 18px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .moderator-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .btn-moderate {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
         }
 
-        .greeting-card .to {
-            color: var(--gold);
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        .btn-approve {
+            background: #2e7d32;
+            color: white;
         }
 
-        .greeting-card .message {
-            font-style: italic;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 1.5rem;
-            margin: 1rem 0;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            border-left: 4px solid var(--gold);
-            color: #e8e0c9;
+        .btn-approve:hover {
+            background: #1b5e20;
+            box-shadow: 0 0 15px #2e7d32;
         }
 
+        .btn-reject {
+            background: #c62828;
+            color: white;
+        }
+
+        .btn-reject:hover {
+            background: #b71c1c;
+            box-shadow: 0 0 15px #c62828;
+        }
+
+        /* Список одобренных поздравлений */
+        .approved-greetings {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .approved-card {
+            background: rgba(30, 40, 30, 0.9);
+            border: 2px solid #b8860b;
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s;
+            animation: fadeIn 0.5s;
+        }
+
+        .approved-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-color: #ffd700;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Модальное окно авторизации */
         .modal {
             display: none;
             position: fixed;
@@ -291,7 +378,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.8);
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -302,340 +389,156 @@
         }
 
         .modal-content {
-            background: var(--army-dark);
-            border: 3px solid var(--gold);
-            padding: 3rem;
+            background: linear-gradient(135deg, #1a2a1a, #0a1a0a);
+            border: 3px solid #b8860b;
+            border-radius: 20px;
+            padding: 40px;
             max-width: 400px;
             width: 90%;
             position: relative;
-            box-shadow: 0 0 50px var(--gold);
         }
 
-        .modal-content h2 {
-            color: var(--gold);
-            text-align: center;
-            margin-bottom: 2rem;
-            border-bottom: 2px solid var(--gold);
-            padding-bottom: 1rem;
-        }
-
-        .modal-content input {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 1.5rem;
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid var(--sand);
-            color: #e8e0c9;
-            font-size: 1rem;
-        }
-
-        .modal-content button {
-            width: 100%;
-        }
-
-        .error-message {
-            color: var(--blood);
-            text-align: center;
-            margin-top: 1rem;
-            display: none;
-        }
-
-        .moderation-section {
-            border-color: var(--blood);
-        }
-
-        .moderation-section h2 {
-            color: var(--blood);
-            border-bottom-color: var(--blood);
-        }
-
-        .moderation-item {
-            background: linear-gradient(135deg, #2a1a1a, #3b2a2a);
-            border: 2px solid var(--blood);
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-
-        .moderation-item p {
-            margin: 0.8rem 0;
-            font-size: 1.1rem;
-            color: #e8e0c9;
-        }
-
-        .moderation-item strong {
-            color: var(--blood);
-            font-weight: 600;
-        }
-
-        .actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .actions button {
-            flex: 1;
-            padding: 12px;
-        }
-
-        .approve {
-            border-color: #2b4b2b;
-            color: #2b4b2b;
-        }
-
-        .approve:hover {
-            background: #2b4b2b;
-            color: var(--gold);
-        }
-
-        .reject {
-            border-color: var(--blood);
-            color: var(--blood);
-        }
-
-        .reject:hover {
-            background: var(--blood);
-            color: var(--gold);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: var(--sand);
-            font-size: 1.2rem;
-            border: 2px dashed var(--gold);
-        }
-
-        .empty-state::before {
-            content: '🎖';
-            font-size: 4rem;
-            display: block;
-            margin-bottom: 1rem;
-            opacity: 0.7;
-        }
-
-        .loading {
-            text-align: center;
-            color: var(--sand);
-            padding: 3rem;
-            font-size: 1.2rem;
-        }
-
-        .loading::after {
-            content: '';
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            margin-left: 10px;
-            border: 3px solid var(--gold);
-            border-top-color: transparent;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .page {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .result-card {
-            background: linear-gradient(135deg, var(--army-dark), var(--army-green));
-            border: 2px solid var(--gold);
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .result-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                text-align: center;
-                gap: 1rem;
-                padding: 1rem;
-            }
-            
-            nav {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .search-section {
-                flex-direction: column;
-            }
-            
-            .search-section button {
-                width: 100%;
-            }
-            
-            section {
-                padding: 1.5rem;
-            }
-            
-            h2 {
-                font-size: 1.6rem;
-            }
-            
-            .actions {
-                flex-direction: column;
-            }
-            
-            .modal-content {
-                padding: 2rem;
-            }
-        }
-
-        .secret-entry {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            background: var(--army-dark);
-            border: 2px solid var(--gold);
-            cursor: pointer;
-            opacity: 0.3;
-            transition: all 0.3s;
-            z-index: 100;
-        }
-
-        .secret-entry:hover {
-            opacity: 1;
-            background: var(--gold);
-        }
-
-        .secret-entry::before {
-            content: '⚙️';
+        .close-modal {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 1.5rem;
+            top: 15px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            color: #b8860b;
         }
 
-        .logout-btn {
-            background: transparent;
-            border-color: var(--blood);
-            color: var(--blood);
-            padding: 5px 15px;
-            font-size: 0.8rem;
-            margin-left: 10px;
+        .modal h3 {
+            color: #ffd700;
+            font-size: 24px;
+            margin-bottom: 25px;
+            text-align: center;
         }
 
-        .logout-btn:hover {
-            background: var(--blood);
-            color: var(--gold);
+        .status-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
         }
 
-        .user-email {
-            color: var(--gold);
-            margin-right: 15px;
-            font-size: 0.9rem;
+        .status-message.success {
+            background: rgba(46, 125, 50, 0.3);
+            color: #81c784;
+        }
+
+        .status-message.error {
+            background: rgba(198, 40, 40, 0.3);
+            color: #ef5350;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+            color: #808080;
+            border-top: 1px solid #b8860b;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>23 ФЕВРАЛЯ</h1>
-        <nav>
-            <a onclick="showPage('main')" id="nav-main" class="active">ГЛАВНАЯ</a>
-            <a onclick="showModerationLogin()" id="nav-admin">ШТАБ</a>
-        </nav>
-    </header>
+    <div class="camouflage"></div>
+    <div class="star-decoration"></div>
 
-    <!-- Секретный вход -->
-    <div class="secret-entry" onclick="showModerationLogin()" title="Вход для командования"></div>
+    <div class="container">
+        <!-- Кнопки авторизации -->
+        <div class="auth-section">
+            <button class="btn-auth" onclick="showLoginModal()">Вход для модератора</button>
+            <button class="btn-auth" onclick="logout()" id="logoutBtn" style="display: none;">Выйти</button>
+        </div>
 
-    <!-- Модальное окно для входа -->
-    <div id="login-modal" class="modal">
-        <div class="modal-content">
-            <h2>ВХОД В ШТАБ</h2>
-            <input type="email" id="admin-email" placeholder="Email" value="vadaiat4@gmail.com">
-            <input type="password" id="admin-password" placeholder="Пароль" onkeypress="if(event.key==='Enter') loginWithEmail()">
-            <button onclick="loginWithEmail()">ВОЙТИ</button>
-            <div id="login-error" class="error-message"></div>
+        <!-- Шапка сайта -->
+        <div class="header">
+            <h1>С 23 февраля!</h1>
+            <h2>Слава защитникам Отечества!</h2>
+        </div>
+
+        <!-- Форма отправки поздравления -->
+        <div class="greeting-form">
+            <div class="form-title">Отправить поздравление</div>
+            <form id="greetingForm">
+                <div class="form-group">
+                    <label>От кого (Имя, позывной)</label>
+                    <input type="text" id="senderName" required placeholder="Например: Гвардии рядовой Петров">
+                </div>
+                <div class="form-group">
+                    <label>Кому (Имя, подразделение)</label>
+                    <input type="text" id="recipientName" required placeholder="Например: Всему личному составу">
+                </div>
+                <div class="form-group">
+                    <label>Поздравление</label>
+                    <textarea id="greetingText" required placeholder="Введите ваше поздравление..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Воинское звание</label>
+                    <select id="rank">
+                        <option value="Рядовой">Рядовой</option>
+                        <option value="Ефрейтор">Ефрейтор</option>
+                        <option value="Младший сержант">Младший сержант</option>
+                        <option value="Сержант">Сержант</option>
+                        <option value="Старший сержант">Старший сержант</option>
+                        <option value="Прапорщик">Прапорщик</option>
+                        <option value="Лейтенант">Лейтенант</option>
+                        <option value="Старший лейтенант">Старший лейтенант</option>
+                        <option value="Капитан">Капитан</option>
+                        <option value="Майор">Майор</option>
+                        <option value="Подполковник">Подполковник</option>
+                        <option value="Полковник">Полковник</option>
+                        <option value="Генерал">Генерал</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-submit">Отправить на модерацию</button>
+            </form>
+        </div>
+
+        <!-- Список одобренных поздравлений -->
+        <h2 style="margin: 40px 0 20px; text-align: center;">Одобренные поздравления</h2>
+        <div class="approved-greetings" id="approvedGreetings"></div>
+
+        <!-- Панель модератора (видна только авторизованным) -->
+        <div class="moderator-panel" id="moderatorPanel" style="display: none;">
+            <div class="moderator-header">
+                <h3>⚡ Панель модератора ⚡</h3>
+                <span style="color: #ffd700;" id="moderatorEmail"></span>
+            </div>
+            <div id="pendingGreetings"></div>
+        </div>
+
+        <!-- Модальное окно входа -->
+        <div class="modal" id="loginModal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="hideLoginModal()">&times;</span>
+                <h3>Вход для модератора</h3>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="btn-submit" style="font-size: 16px; padding: 12px;">Войти</button>
+                </form>
+                <div id="loginStatus" class="status-message"></div>
+            </div>
         </div>
     </div>
 
-    <main>
-        <!-- Главная страница -->
-        <div id="main-page" class="page">
-            <section class="search-section">
-                <h2>НАЙТИ ЗАЩИТНИКА ⭐</h2>
-                <input type="text" id="search-name" placeholder="Введите имя бойца..." autocomplete="off">
-                <button onclick="searchGreetings()">🔍 НАЙТИ</button>
-            </section>
-
-            <section class="create-section">
-                <h2>ДОБАВИТЬ ПОЗДРАВЛЕНИЕ ⭐</h2>
-                <form id="greeting-form" onsubmit="event.preventDefault(); addGreeting();">
-                    <div class="form-group">
-                        <label for="from-name">ОТ КОГО (Позывной)</label>
-                        <input type="text" id="from-name" placeholder="Ваше имя" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="to-name">КОМУ (Имя защитника)</label>
-                        <input type="text" id="to-name" placeholder="Имя бойца" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">ТЕКСТ ПОЗДРАВЛЕНИЯ</label>
-                        <textarea id="message" rows="4" placeholder="Ваши пожелания..." required></textarea>
-                    </div>
-                    <button type="submit">📨 ОТПРАВИТЬ В ШТАБ</button>
-                </form>
-            </section>
-
-            <section class="results-section" id="results-section" style="display: none;">
-                <h2>РЕЗУЛЬТАТЫ ПОИСКА ⭐</h2>
-                <div id="results-container" class="results-grid"></div>
-            </section>
-        </div>
-
-        <!-- Страница модерации -->
-        <div id="admin-page" class="page hidden">
-            <section class="moderation-section">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                    <h2>ЗАЯВКИ НА ПРОВЕРКУ</h2>
-                    <div>
-                        <span class="user-email" id="user-email"></span>
-                        <button class="logout-btn" onclick="logout()">ВЫХОД</button>
-                    </div>
-                </div>
-                <div id="moderation-list">
-                    <p class="loading">ЗАГРУЗКА ДАННЫХ</p>
-                </div>
-            </section>
-        </div>
-    </main>
+    <div class="footer">
+        <p>С праздником, защитники! 🇷🇺 23 февраля 2025</p>
+    </div>
 
     <script>
-        // НОВЫЕ ДАННЫЕ FIREBASE
+        // Конфигурация Firebase с вашими данными
         const firebaseConfig = {
-            apiKey: "AIzaSyBdmfKkLzGC_bx8F_0gNvHHzSWpZbKAk3YU",
+            apiKey: "AIzaSyBdmfklzGC_bx8F_0gNvHHzSWpZbKAk3YU",
             authDomain: "new-fad3e.firebaseapp.com",
             projectId: "new-fad3e",
             storageBucket: "new-fad3e.firebasestorage.app",
@@ -648,254 +551,249 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // Данные администратора
-        const ADMIN_UID = "aRoG4om1DMWdaRrVjVk85XeNsV63";
-        const ADMIN_EMAIL = "vadaiat4@gmail.com";
-
         // Состояние авторизации
-        let isAuthenticated = false;
+        let currentUser = null;
 
-        // Проверка авторизации
+        // Отслеживание состояния авторизации
         auth.onAuthStateChanged((user) => {
+            currentUser = user;
+            const moderatorPanel = document.getElementById('moderatorPanel');
+            const logoutBtn = document.getElementById('logoutBtn');
+            
             if (user) {
-                if (user.uid === ADMIN_UID || user.email === ADMIN_EMAIL) {
-                    isAuthenticated = true;
-                    document.getElementById('user-email').textContent = user.email;
-                    if (!document.getElementById('admin-page').classList.contains('hidden')) {
-                        loadModerationRequests();
-                    }
-                } else {
-                    isAuthenticated = false;
-                    auth.signOut();
-                }
+                document.getElementById('moderatorEmail').textContent = user.email;
+                moderatorPanel.style.display = 'block';
+                logoutBtn.style.display = 'inline-block';
+                loadPendingGreetings();
             } else {
-                isAuthenticated = false;
-                if (!document.getElementById('admin-page').classList.contains('hidden')) {
-                    showPage('main');
-                }
+                moderatorPanel.style.display = 'none';
+                logoutBtn.style.display = 'none';
             }
         });
 
-        // Показать окно входа
-        function showModerationLogin() {
-            if (isAuthenticated) {
-                showPage('admin');
-            } else {
-                document.getElementById('login-modal').classList.add('active');
-                document.getElementById('admin-password').value = '';
-                document.getElementById('login-error').style.display = 'none';
+        // Загрузка одобренных поздравлений
+        async function loadApprovedGreetings() {
+            try {
+                const snapshot = await db.collection('greetings')
+                    .where('status', '==', 'approved')
+                    .orderBy('createdAt', 'desc')
+                    .get();
+                
+                const container = document.getElementById('approvedGreetings');
+                container.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    container.innerHTML = '<p style="text-align: center; color: #808080;">Пока нет одобренных поздравлений</p>';
+                    return;
+                }
+                
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const card = document.createElement('div');
+                    card.className = 'approved-card';
+                    
+                    // Форматирование даты
+                    let dateText = 'Дата не указана';
+                    if (data.createdAt) {
+                        const date = data.createdAt.toDate();
+                        dateText = `${date.toLocaleDateString('ru-RU')} ${date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`;
+                    }
+                    
+                    card.innerHTML = `
+                        <h4>${data.rank || 'Военнослужащий'} ${data.sender || 'Аноним'}</h4>
+                        <div class="greeting-meta">
+                            <span>🎖️ Кому: ${data.recipient || 'Защитникам'}</span>
+                            <span>📅 ${dateText}</span>
+                        </div>
+                        <div class="greeting-text">${data.text || 'Поздравление'}</div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Ошибка загрузки:', error);
+                document.getElementById('approvedGreetings').innerHTML = '<p style="color: #c62828;">Ошибка загрузки поздравлений</p>';
             }
         }
 
-        // Вход
-        async function loginWithEmail() {
-            const email = document.getElementById('admin-email').value;
-            const password = document.getElementById('admin-password').value;
+        // Загрузка ожидающих модерации поздравлений
+        async function loadPendingGreetings() {
+            if (!currentUser) return;
+            
+            try {
+                const snapshot = await db.collection('greetings')
+                    .where('status', '==', 'pending')
+                    .orderBy('createdAt', 'desc')
+                    .get();
+                
+                const container = document.getElementById('pendingGreetings');
+                container.innerHTML = '<h4 style="margin-bottom: 20px; color: #ffd700;">Ожидают модерации:</h4>';
+                
+                if (snapshot.empty) {
+                    container.innerHTML += '<p style="color: #808080;">Нет новых заявок</p>';
+                    return;
+                }
+                
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const card = document.createElement('div');
+                    card.className = 'greeting-card pending';
+                    card.id = `greeting-${doc.id}`;
+                    
+                    // Форматирование даты
+                    let dateText = 'Дата не указана';
+                    if (data.createdAt) {
+                        const date = data.createdAt.toDate();
+                        dateText = `${date.toLocaleDateString('ru-RU')} ${date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`;
+                    }
+                    
+                    card.innerHTML = `
+                        <h4>${data.rank || 'Рядовой'} ${data.sender || 'Аноним'}</h4>
+                        <div class="greeting-meta">
+                            <span>🎯 Кому: ${data.recipient || 'Не указано'}</span>
+                            <span>📅 ${dateText}</span>
+                        </div>
+                        <div class="greeting-text">${data.text || 'Нет текста'}</div>
+                        <div class="moderator-actions">
+                            <button class="btn-moderate btn-approve" onclick="moderateGreeting('${doc.id}', 'approved')">✅ Одобрить</button>
+                            <button class="btn-moderate btn-reject" onclick="moderateGreeting('${doc.id}', 'rejected')">❌ Отклонить</button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Ошибка загрузки заявок:', error);
+            }
+        }
 
+        // Модерация поздравления
+        async function moderateGreeting(id, status) {
+            if (!currentUser) {
+                alert('Требуется авторизация');
+                return;
+            }
+            
+            try {
+                await db.collection('greetings').doc(id).update({
+                    status: status,
+                    moderatedBy: currentUser.email,
+                    moderatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                // Удаляем карточку из списка ожидающих
+                const element = document.getElementById(`greeting-${id}`);
+                if (element) {
+                    element.remove();
+                }
+                
+                // Проверяем, остались ли еще заявки
+                const pendingContainer = document.getElementById('pendingGreetings');
+                if (pendingContainer.children.length <= 1) { // Только заголовок
+                    pendingContainer.innerHTML = '<h4 style="margin-bottom: 20px; color: #ffd700;">Ожидают модерации:</h4><p style="color: #808080;">Нет новых заявок</p>';
+                }
+                
+                // Обновляем список одобренных
+                await loadApprovedGreetings();
+                
+                // Показываем уведомление
+                alert(`Поздравление ${status === 'approved' ? 'одобрено' : 'отклонено'}`);
+            } catch (error) {
+                console.error('Ошибка модерации:', error);
+                alert('Ошибка при модерации');
+            }
+        }
+
+        // Отправка нового поздравления
+        document.getElementById('greetingForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const sender = document.getElementById('senderName').value;
+            const recipient = document.getElementById('recipientName').value;
+            const text = document.getElementById('greetingText').value;
+            const rank = document.getElementById('rank').value;
+            
+            // Валидация
+            if (!sender || !recipient || !text) {
+                alert('Пожалуйста, заполните все поля');
+                return;
+            }
+            
+            try {
+                await db.collection('greetings').add({
+                    sender: sender,
+                    recipient: recipient,
+                    text: text,
+                    rank: rank,
+                    status: 'pending',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                alert('Поздравление отправлено на модерацию!');
+                e.target.reset();
+            } catch (error) {
+                console.error('Ошибка отправки:', error);
+                alert('Ошибка при отправке: ' + error.message);
+            }
+        });
+
+        // Авторизация
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const statusDiv = document.getElementById('loginStatus');
+            
             try {
                 await auth.signInWithEmailAndPassword(email, password);
-                document.getElementById('login-modal').classList.remove('active');
+                statusDiv.textContent = 'Успешный вход!';
+                statusDiv.className = 'status-message success';
+                setTimeout(() => {
+                    hideLoginModal();
+                    statusDiv.textContent = '';
+                }, 1000);
             } catch (error) {
-                document.getElementById('login-error').style.display = 'block';
-                document.getElementById('login-error').textContent = 'Ошибка входа: ' + error.message;
+                statusDiv.textContent = 'Ошибка: ' + error.message;
+                statusDiv.className = 'status-message error';
             }
-        }
+        });
 
         // Выход
         async function logout() {
-            await auth.signOut();
-            showPage('main');
-        }
-
-        // Переключение страниц
-        function showPage(page) {
-            const mainPage = document.getElementById('main-page');
-            const adminPage = document.getElementById('admin-page');
-            const navMain = document.getElementById('nav-main');
-            const navAdmin = document.getElementById('nav-admin');
-
-            if (page === 'main') {
-                mainPage.classList.remove('hidden');
-                adminPage.classList.add('hidden');
-                navMain.classList.add('active');
-                navAdmin.classList.remove('active');
-            } else {
-                if (!isAuthenticated) {
-                    showModerationLogin();
-                    return;
-                }
-                mainPage.classList.add('hidden');
-                adminPage.classList.remove('hidden');
-                navMain.classList.remove('active');
-                navAdmin.classList.add('active');
-                loadModerationRequests();
-            }
-        }
-
-        // Загрузка заявок
-        async function loadModerationRequests() {
-            const container = document.getElementById('moderation-list');
-            
-            if (!isAuthenticated) {
-                container.innerHTML = '<div class="empty-state">Требуется авторизация</div>';
-                return;
-            }
-
             try {
-                const snapshot = await db.collection('pending')
-                    .orderBy('timestamp', 'desc')
-                    .get();
-                
-                if (snapshot.empty) {
-                    container.innerHTML = '<div class="empty-state">Новых заявок нет</div>';
-                    return;
-                }
-
-                let html = '';
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    const date = data.timestamp?.toDate 
-                        ? data.timestamp.toDate().toLocaleString('ru-RU')
-                        : 'Дата неизвестна';
-                    
-                    html += `
-                        <div class="moderation-item">
-                            <p><strong>От:</strong> ${escapeHtml(data.from)}</p>
-                            <p><strong>Кому:</strong> ${escapeHtml(data.to)}</p>
-                            <p><strong>Поздравление:</strong></p>
-                            <p class="message">${escapeHtml(data.message)}</p>
-                            <p><small>${date}</small></p>
-                            <div class="actions">
-                                <button class="approve" onclick="approveGreeting('${doc.id}')">✅ ОДОБРИТЬ</button>
-                                <button class="reject" onclick="rejectGreeting('${doc.id}')">❌ ОТКЛОНИТЬ</button>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                container.innerHTML = html;
+                await auth.signOut();
+                alert('Вы вышли из системы');
             } catch (error) {
-                container.innerHTML = `<div class="empty-state">Ошибка загрузки: ${error.message}</div>`;
+                console.error('Ошибка выхода:', error);
             }
         }
 
-        // Добавление поздравления
-        async function addGreeting() {
-            const from = document.getElementById('from-name').value;
-            const to = document.getElementById('to-name').value;
-            const message = document.getElementById('message').value;
+        // Управление модальным окном
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.add('active');
+        }
 
-            if (!from || !to || !message) {
-                alert('Заполните все поля!');
-                return;
-            }
+        function hideLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+            document.getElementById('loginForm').reset();
+            document.getElementById('loginStatus').textContent = '';
+        }
 
-            try {
-                await db.collection('pending').add({
-                    from: from.trim(),
-                    to: to.trim(),
-                    message: message.trim(),
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                
-                alert('Поздравление отправлено в штаб на проверку!');
-                document.getElementById('greeting-form').reset();
-            } catch (error) {
-                alert('Ошибка: ' + error.message);
+        // Закрытие модального окна по клику вне его
+        window.onclick = function(event) {
+            const modal = document.getElementById('loginModal');
+            if (event.target === modal) {
+                hideLoginModal();
             }
         }
 
-        // Одобрение
-        async function approveGreeting(id) {
-            if (!isAuthenticated) return;
+        // Загрузка одобренных поздравлений при старте
+        loadApprovedGreetings();
 
-            try {
-                const doc = await db.collection('pending').doc(id).get();
-                const data = doc.data();
-                
-                await db.collection('approved').add({
-                    ...data,
-                    approved: true,
-                    approvedAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                
-                await db.collection('pending').doc(id).delete();
-                
-                loadModerationRequests();
-                alert('Поздравление одобрено!');
-            } catch (error) {
-                alert('Ошибка: ' + error.message);
-            }
-        }
-
-        // Отклонение
-        async function rejectGreeting(id) {
-            if (!isAuthenticated) return;
-            
-            if (confirm('Удалить эту заявку?')) {
-                try {
-                    await db.collection('pending').doc(id).delete();
-                    loadModerationRequests();
-                    alert('Заявка отклонена');
-                } catch (error) {
-                    alert('Ошибка: ' + error.message);
-                }
-            }
-        }
-
-        // Поиск
-        async function searchGreetings() {
-            const searchName = document.getElementById('search-name').value.trim().toLowerCase();
-            const resultsSection = document.getElementById('results-section');
-            const resultsContainer = document.getElementById('results-container');
-
-            if (!searchName) {
-                alert('Введите имя для поиска');
-                return;
-            }
-
-            try {
-                const snapshot = await db.collection('approved').get();
-                const results = [];
-                
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    if (data.to && data.to.toLowerCase().includes(searchName)) {
-                        results.push(data);
-                    }
-                });
-
-                if (results.length === 0) {
-                    resultsContainer.innerHTML = `<div class="empty-state">Бойцов с именем "${searchName}" не найдено</div>`;
-                } else {
-                    let html = '';
-                    results.forEach(greeting => {
-                        html += `
-                            <div class="result-card">
-                                <div style="font-size: 2rem; margin-bottom: 1rem;">⭐</div>
-                                <h3 style="color: var(--gold); font-size: 1.5rem; margin-bottom: 0.5rem;">${escapeHtml(greeting.to)}</h3>
-                                <p style="color: var(--sand); margin-bottom: 1rem;">От: ${escapeHtml(greeting.from)}</p>
-                                <p style="font-style: italic; line-height: 1.6;">"${escapeHtml(greeting.message)}"</p>
-                            </div>
-                        `;
-                    });
-                    resultsContainer.innerHTML = html;
-                }
-
-                resultsSection.style.display = 'block';
-                resultsSection.scrollIntoView({ behavior: 'smooth' });
-            } catch (error) {
-                alert('Ошибка поиска: ' + error.message);
-            }
-        }
-
-        // Защита от XSS
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
+        // Экспорт функций для глобального доступа
+        window.showLoginModal = showLoginModal;
+        window.hideLoginModal = hideLoginModal;
+        window.logout = logout;
+        window.moderateGreeting = moderateGreeting;
     </script>
 </body>
 </html>
