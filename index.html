@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>С 23 февраля | Защитникам Отечества</title>
-    <!-- Firebase SDK (Compat версия) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -633,7 +633,7 @@
     </main>
 
     <script>
-        // ✅ НОВЫЕ ПРАВИЛЬНЫЕ ДАННЫЕ FIREBASE
+        // ✅ ВАШИ ПРАВИЛЬНЫЕ ДАННЫЕ ИЗ НОВОГО ПРОЕКТА
         const firebaseConfig = {
             apiKey: "AIzaSyBdmfKkLzGC_bx8F_0gNvHHzSWpZbKAk3YU",
             authDomain: "new-fad3e.firebaseapp.com",
@@ -651,31 +651,24 @@
         // Состояние авторизации
         let isAuthenticated = false;
         
-        // ВАШ USER UID (нужно будет заменить после создания пользователя)
-        let ADMIN_UID = "";
+        // ВАША ПОЧТА ДЛЯ АДМИНА
+        const ADMIN_EMAIL = "vadaiat4@gmail.com";
 
         // Проверка авторизации при загрузке
         auth.onAuthStateChanged((user) => {
             console.log("Auth state changed:", user ? user.email : "No user");
-            if (user) {
-                // Если это первый вход - сохраняем UID
-                if (!ADMIN_UID) {
-                    ADMIN_UID = user.uid;
-                    console.log("Admin UID set to:", ADMIN_UID);
-                }
-                
-                if (user.uid === ADMIN_UID) {
-                    isAuthenticated = true;
-                    document.getElementById('user-email').textContent = user.email;
-                    if (!document.getElementById('admin-page').classList.contains('hidden')) {
-                        loadModerationRequests();
-                    }
-                } else {
-                    isAuthenticated = false;
-                    auth.signOut();
+            if (user && user.email === ADMIN_EMAIL) {
+                isAuthenticated = true;
+                document.getElementById('user-email').textContent = user.email;
+                if (!document.getElementById('admin-page').classList.contains('hidden')) {
+                    loadModerationRequests();
                 }
             } else {
                 isAuthenticated = false;
+                if (user) {
+                    console.log("User not admin, signing out");
+                    auth.signOut();
+                }
                 if (!document.getElementById('admin-page').classList.contains('hidden')) {
                     showPage('main');
                 }
