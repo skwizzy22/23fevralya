@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>С 23 февраля! 🇷🇺 Военные поздравления</title>
+    <title>С 23 февраля! 🇷🇺 Поздравления защитникам</title>
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -23,7 +23,6 @@
             color: #e8d9b5;
         }
 
-        /* Военный паттерн */
         .camouflage {
             background-image: 
                 radial-gradient(circle at 30% 40%, #3a6b4a 8px, transparent 8px),
@@ -40,7 +39,6 @@
             opacity: 0.3;
         }
 
-        /* Звезды по углам */
         .star-decoration {
             position: fixed;
             width: 100%;
@@ -79,7 +77,6 @@
             z-index: 1;
         }
 
-        /* Шапка с военной символикой */
         .header {
             text-align: center;
             padding: 30px 20px;
@@ -129,7 +126,6 @@
             text-shadow: 2px 2px 0 #2a3a2a;
         }
 
-        /* Кнопки авторизации */
         .auth-section {
             display: flex;
             justify-content: flex-end;
@@ -159,7 +155,6 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
         }
 
-        /* Форма отправки поздравления */
         .greeting-form {
             background: rgba(20, 30, 20, 0.9);
             border: 2px solid #b8860b;
@@ -193,7 +188,7 @@
             letter-spacing: 1px;
         }
 
-        input, textarea, select {
+        input, textarea {
             width: 100%;
             padding: 12px 15px;
             background: rgba(10, 20, 10, 0.8);
@@ -204,14 +199,14 @@
             transition: all 0.3s;
         }
 
-        input:focus, textarea:focus, select:focus {
+        input:focus, textarea:focus {
             outline: none;
             border-color: #b8860b;
             box-shadow: 0 0 15px rgba(184, 134, 11, 0.5);
         }
 
         textarea {
-            min-height: 100px;
+            min-height: 120px;
             resize: vertical;
         }
 
@@ -237,7 +232,6 @@
             box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
         }
 
-        /* Панель модерации */
         .moderator-panel {
             background: rgba(10, 20, 10, 0.95);
             border: 3px solid #b8860b;
@@ -273,16 +267,7 @@
 
         .greeting-card.pending {
             border-left: 10px solid #b8860b;
-        }
-
-        .greeting-card.approved {
-            border-left: 10px solid #2e7d32;
-            opacity: 0.8;
-        }
-
-        .greeting-card.rejected {
-            border-left: 10px solid #c62828;
-            opacity: 0.6;
+            background: rgba(40, 50, 40, 0.9);
         }
 
         .greeting-card h4 {
@@ -297,22 +282,27 @@
             color: #a0a0a0;
             font-size: 14px;
             margin-bottom: 10px;
+            flex-wrap: wrap;
         }
 
         .greeting-text {
             font-size: 18px;
-            margin-bottom: 15px;
-            line-height: 1.5;
+            margin: 15px 0;
+            line-height: 1.6;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            font-style: italic;
         }
 
         .moderator-actions {
             display: flex;
             gap: 15px;
-            margin-top: 15px;
+            margin-top: 20px;
         }
 
         .btn-moderate {
-            padding: 10px 20px;
+            padding: 12px 25px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -320,6 +310,8 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             transition: all 0.3s;
+            flex: 1;
+            font-size: 16px;
         }
 
         .btn-approve {
@@ -342,10 +334,9 @@
             box-shadow: 0 0 15px #c62828;
         }
 
-        /* Список одобренных поздравлений */
         .approved-greetings {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 25px;
             margin-top: 30px;
         }
@@ -354,7 +345,7 @@
             background: rgba(30, 40, 30, 0.9);
             border: 2px solid #b8860b;
             border-radius: 15px;
-            padding: 20px;
+            padding: 25px;
             transition: all 0.3s;
             animation: fadeIn 0.5s;
         }
@@ -365,12 +356,26 @@
             border-color: #ffd700;
         }
 
+        .approved-card h4 {
+            font-size: 22px;
+            color: #ffd700;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #b8860b;
+            padding-bottom: 10px;
+        }
+
+        .approved-card .greeting-text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #e8d9b5;
+            margin: 15px 0;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Модальное окно авторизации */
         .modal {
             display: none;
             position: fixed;
@@ -432,13 +437,43 @@
             color: #ef5350;
         }
 
-        /* Footer */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #1a2a1a, #0a1a0a);
+            border: 2px solid #b8860b;
+            border-radius: 10px;
+            color: #ffd700;
+            font-weight: bold;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
         .footer {
             text-align: center;
             padding: 20px;
             margin-top: 50px;
             color: #808080;
             border-top: 1px solid #b8860b;
+        }
+
+        .debug-info {
+            background: rgba(0, 0, 0, 0.5);
+            color: #ffd700;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            display: none;
         }
     </style>
 </head>
@@ -447,70 +482,49 @@
     <div class="star-decoration"></div>
 
     <div class="container">
-        <!-- Кнопки авторизации -->
         <div class="auth-section">
             <button class="btn-auth" onclick="showLoginModal()">Вход для модератора</button>
             <button class="btn-auth" onclick="logout()" id="logoutBtn" style="display: none;">Выйти</button>
         </div>
 
-        <!-- Шапка сайта -->
         <div class="header">
             <h1>С 23 февраля!</h1>
             <h2>Слава защитникам Отечества!</h2>
         </div>
 
-        <!-- Форма отправки поздравления -->
         <div class="greeting-form">
             <div class="form-title">Отправить поздравление</div>
             <form id="greetingForm">
                 <div class="form-group">
                     <label>От кого (Имя, позывной)</label>
-                    <input type="text" id="senderName" required placeholder="Например: Гвардии рядовой Петров">
+                    <input type="text" id="senderName" required placeholder="Например: Иван Петров">
                 </div>
                 <div class="form-group">
                     <label>Кому (Имя, подразделение)</label>
-                    <input type="text" id="recipientName" required placeholder="Например: Всему личному составу">
+                    <input type="text" id="recipientName" required placeholder="Например: Защитникам Отечества">
                 </div>
                 <div class="form-group">
                     <label>Поздравление</label>
                     <textarea id="greetingText" required placeholder="Введите ваше поздравление..."></textarea>
                 </div>
-                <div class="form-group">
-                    <label>Воинское звание</label>
-                    <select id="rank">
-                        <option value="Рядовой">Рядовой</option>
-                        <option value="Ефрейтор">Ефрейтор</option>
-                        <option value="Младший сержант">Младший сержант</option>
-                        <option value="Сержант">Сержант</option>
-                        <option value="Старший сержант">Старший сержант</option>
-                        <option value="Прапорщик">Прапорщик</option>
-                        <option value="Лейтенант">Лейтенант</option>
-                        <option value="Старший лейтенант">Старший лейтенант</option>
-                        <option value="Капитан">Капитан</option>
-                        <option value="Майор">Майор</option>
-                        <option value="Подполковник">Подполковник</option>
-                        <option value="Полковник">Полковник</option>
-                        <option value="Генерал">Генерал</option>
-                    </select>
-                </div>
                 <button type="submit" class="btn-submit">Отправить на модерацию</button>
             </form>
         </div>
 
-        <!-- Список одобренных поздравлений -->
         <h2 style="margin: 40px 0 20px; text-align: center;">Одобренные поздравления</h2>
-        <div class="approved-greetings" id="approvedGreetings"></div>
+        <div class="approved-greetings" id="approvedGreetings">
+            <p style="text-align: center; color: #808080; grid-column: 1/-1;">Загрузка...</p>
+        </div>
 
-        <!-- Панель модератора (видна только авторизованным) -->
         <div class="moderator-panel" id="moderatorPanel" style="display: none;">
             <div class="moderator-header">
                 <h3>⚡ Панель модератора ⚡</h3>
                 <span style="color: #ffd700;" id="moderatorEmail"></span>
             </div>
             <div id="pendingGreetings"></div>
+            <div id="moderatorDebug" class="debug-info"></div>
         </div>
 
-        <!-- Модальное окно входа -->
         <div class="modal" id="loginModal">
             <div class="modal-content">
                 <span class="close-modal" onclick="hideLoginModal()">&times;</span>
@@ -536,7 +550,6 @@
     </div>
 
     <script>
-        // Конфигурация Firebase с вашими данными
         const firebaseConfig = {
             apiKey: "AIzaSyBdmfklzGC_bx8F_0gNvHHzSWpZbKAk3YU",
             authDomain: "new-fad3e.firebaseapp.com",
@@ -551,8 +564,20 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // Состояние авторизации
         let currentUser = null;
+
+        // Функция для показа уведомлений
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            notification.style.borderColor = type === 'success' ? '#2e7d32' : '#b8860b';
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
 
         // Отслеживание состояния авторизации
         auth.onAuthStateChanged((user) => {
@@ -565,6 +590,7 @@
                 moderatorPanel.style.display = 'block';
                 logoutBtn.style.display = 'inline-block';
                 loadPendingGreetings();
+                showNotification('Добро пожаловать, модератор!', 'success');
             } else {
                 moderatorPanel.style.display = 'none';
                 logoutBtn.style.display = 'none';
@@ -574,6 +600,8 @@
         // Загрузка одобренных поздравлений
         async function loadApprovedGreetings() {
             try {
+                console.log('Загрузка одобренных поздравлений...');
+                
                 const snapshot = await db.collection('greetings')
                     .where('status', '==', 'approved')
                     .orderBy('createdAt', 'desc')
@@ -583,43 +611,61 @@
                 container.innerHTML = '';
                 
                 if (snapshot.empty) {
-                    container.innerHTML = '<p style="text-align: center; color: #808080;">Пока нет одобренных поздравлений</p>';
+                    container.innerHTML = '<p style="text-align: center; color: #808080; grid-column: 1/-1;">Пока нет одобренных поздравлений</p>';
                     return;
                 }
                 
+                let count = 0;
                 snapshot.forEach(doc => {
                     const data = doc.data();
+                    console.log('Загружено поздравление:', data);
+                    
                     const card = document.createElement('div');
                     card.className = 'approved-card';
                     
-                    // Форматирование даты
-                    let dateText = 'Дата не указана';
+                    let dateText = 'Только что';
                     if (data.createdAt) {
-                        const date = data.createdAt.toDate();
-                        dateText = `${date.toLocaleDateString('ru-RU')} ${date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`;
+                        try {
+                            const date = data.createdAt.toDate();
+                            dateText = date.toLocaleString('ru-RU', { 
+                                day: 'numeric', 
+                                month: 'long', 
+                                hour: '2-digit', 
+                                minute: '2-digit' 
+                            });
+                        } catch (e) {
+                            console.error('Ошибка форматирования даты:', e);
+                        }
                     }
                     
                     card.innerHTML = `
-                        <h4>${data.rank || 'Военнослужащий'} ${data.sender || 'Аноним'}</h4>
+                        <h4>${data.sender || 'Поздравляющий'}</h4>
                         <div class="greeting-meta">
                             <span>🎖️ Кому: ${data.recipient || 'Защитникам'}</span>
                             <span>📅 ${dateText}</span>
                         </div>
-                        <div class="greeting-text">${data.text || 'Поздравление'}</div>
+                        <div class="greeting-text">${data.text || 'С праздником!'}</div>
                     `;
                     container.appendChild(card);
+                    count++;
                 });
+                
+                console.log(`Загружено ${count} одобренных поздравлений`);
+                
             } catch (error) {
-                console.error('Ошибка загрузки:', error);
-                document.getElementById('approvedGreetings').innerHTML = '<p style="color: #c62828;">Ошибка загрузки поздравлений</p>';
+                console.error('Ошибка загрузки одобренных:', error);
+                document.getElementById('approvedGreetings').innerHTML = 
+                    '<p style="color: #c62828; grid-column: 1/-1;">Ошибка загрузки поздравлений. Проверьте подключение к Firebase.</p>';
             }
         }
 
-        // Загрузка ожидающих модерации поздравлений
+        // Загрузка ожидающих модерации
         async function loadPendingGreetings() {
             if (!currentUser) return;
             
             try {
+                console.log('Загрузка ожидающих модерации...');
+                
                 const snapshot = await db.collection('greetings')
                     .where('status', '==', 'pending')
                     .orderBy('createdAt', 'desc')
@@ -633,21 +679,32 @@
                     return;
                 }
                 
+                let count = 0;
                 snapshot.forEach(doc => {
                     const data = doc.data();
+                    console.log('Заявка на модерацию:', doc.id, data);
+                    
                     const card = document.createElement('div');
                     card.className = 'greeting-card pending';
                     card.id = `greeting-${doc.id}`;
                     
-                    // Форматирование даты
-                    let dateText = 'Дата не указана';
+                    let dateText = 'Только что';
                     if (data.createdAt) {
-                        const date = data.createdAt.toDate();
-                        dateText = `${date.toLocaleDateString('ru-RU')} ${date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`;
+                        try {
+                            const date = data.createdAt.toDate();
+                            dateText = date.toLocaleString('ru-RU', { 
+                                day: 'numeric', 
+                                month: 'numeric', 
+                                hour: '2-digit', 
+                                minute: '2-digit' 
+                            });
+                        } catch (e) {
+                            console.error('Ошибка форматирования даты:', e);
+                        }
                     }
                     
                     card.innerHTML = `
-                        <h4>${data.rank || 'Рядовой'} ${data.sender || 'Аноним'}</h4>
+                        <h4>От: ${data.sender || 'Аноним'}</h4>
                         <div class="greeting-meta">
                             <span>🎯 Кому: ${data.recipient || 'Не указано'}</span>
                             <span>📅 ${dateText}</span>
@@ -659,9 +716,15 @@
                         </div>
                     `;
                     container.appendChild(card);
+                    count++;
                 });
+                
+                console.log(`Загружено ${count} заявок на модерацию`);
+                
             } catch (error) {
                 console.error('Ошибка загрузки заявок:', error);
+                document.getElementById('pendingGreetings').innerHTML = 
+                    '<p style="color: #c62828;">Ошибка загрузки заявок</p>';
             }
         }
 
@@ -673,32 +736,34 @@
             }
             
             try {
+                console.log(`Модерация ${id}: ${status}`);
+                
                 await db.collection('greetings').doc(id).update({
                     status: status,
                     moderatedBy: currentUser.email,
                     moderatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 
-                // Удаляем карточку из списка ожидающих
                 const element = document.getElementById(`greeting-${id}`);
                 if (element) {
                     element.remove();
                 }
                 
-                // Проверяем, остались ли еще заявки
+                await loadApprovedGreetings();
+                
+                const statusText = status === 'approved' ? 'одобрено' : 'отклонено';
+                showNotification(`Поздравление ${statusText}!`, 'success');
+                
+                // Проверяем, остались ли заявки
                 const pendingContainer = document.getElementById('pendingGreetings');
-                if (pendingContainer.children.length <= 1) { // Только заголовок
+                const pendingCards = pendingContainer.querySelectorAll('.greeting-card');
+                if (pendingCards.length === 0) {
                     pendingContainer.innerHTML = '<h4 style="margin-bottom: 20px; color: #ffd700;">Ожидают модерации:</h4><p style="color: #808080;">Нет новых заявок</p>';
                 }
                 
-                // Обновляем список одобренных
-                await loadApprovedGreetings();
-                
-                // Показываем уведомление
-                alert(`Поздравление ${status === 'approved' ? 'одобрено' : 'отклонено'}`);
             } catch (error) {
                 console.error('Ошибка модерации:', error);
-                alert('Ошибка при модерации');
+                alert('Ошибка при модерации: ' + error.message);
             }
         }
 
@@ -706,32 +771,43 @@
         document.getElementById('greetingForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const sender = document.getElementById('senderName').value;
-            const recipient = document.getElementById('recipientName').value;
-            const text = document.getElementById('greetingText').value;
-            const rank = document.getElementById('rank').value;
+            const sender = document.getElementById('senderName').value.trim();
+            const recipient = document.getElementById('recipientName').value.trim();
+            const text = document.getElementById('greetingText').value.trim();
             
-            // Валидация
             if (!sender || !recipient || !text) {
                 alert('Пожалуйста, заполните все поля');
                 return;
             }
             
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Отправка...';
+            
             try {
-                await db.collection('greetings').add({
+                const greetingData = {
                     sender: sender,
                     recipient: recipient,
                     text: text,
-                    rank: rank,
                     status: 'pending',
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
+                };
+                
+                console.log('Отправка данных:', greetingData);
+                
+                const docRef = await db.collection('greetings').add(greetingData);
+                console.log('Документ создан с ID:', docRef.id);
                 
                 alert('Поздравление отправлено на модерацию!');
                 e.target.reset();
+                showNotification('Поздравление отправлено!', 'success');
+                
             } catch (error) {
                 console.error('Ошибка отправки:', error);
                 alert('Ошибка при отправке: ' + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Отправить на модерацию';
             }
         });
 
@@ -742,6 +818,10 @@
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
             const statusDiv = document.getElementById('loginStatus');
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Вход...';
             
             try {
                 await auth.signInWithEmailAndPassword(email, password);
@@ -754,6 +834,9 @@
             } catch (error) {
                 statusDiv.textContent = 'Ошибка: ' + error.message;
                 statusDiv.className = 'status-message error';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Войти';
             }
         });
 
@@ -761,13 +844,12 @@
         async function logout() {
             try {
                 await auth.signOut();
-                alert('Вы вышли из системы');
+                showNotification('Вы вышли из системы');
             } catch (error) {
                 console.error('Ошибка выхода:', error);
             }
         }
 
-        // Управление модальным окном
         function showLoginModal() {
             document.getElementById('loginModal').classList.add('active');
         }
@@ -778,7 +860,6 @@
             document.getElementById('loginStatus').textContent = '';
         }
 
-        // Закрытие модального окна по клику вне его
         window.onclick = function(event) {
             const modal = document.getElementById('loginModal');
             if (event.target === modal) {
@@ -786,10 +867,18 @@
             }
         }
 
-        // Загрузка одобренных поздравлений при старте
-        loadApprovedGreetings();
+        // Загрузка данных при старте
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Страница загружена, инициализация...');
+            loadApprovedGreetings();
+            
+            // Проверка подключения к Firebase
+            db.collection('greetings').limit(1).get()
+                .then(() => console.log('Подключение к Firebase работает'))
+                .catch(error => console.error('Ошибка подключения к Firebase:', error));
+        });
 
-        // Экспорт функций для глобального доступа
+        // Экспорт функций
         window.showLoginModal = showLoginModal;
         window.hideLoginModal = hideLoginModal;
         window.logout = logout;
