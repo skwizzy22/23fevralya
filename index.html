@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>С 23 февраля! 🇷🇺 Поздравления защитникам</title>
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -53,7 +53,7 @@
         .star-decoration::after {
             content: "★";
             position: absolute;
-            font-size: 40px;
+            font-size: clamp(40px, 8vw, 80px);
             color: rgba(255, 215, 0, 0.2);
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
         }
@@ -67,14 +67,13 @@
         .star-decoration::after {
             bottom: 10px;
             right: 10px;
-            font-size: 60px;
             transform: rotate(15deg);
         }
 
         .container {
-            max-width: 600px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 12px;
+            padding: clamp(10px, 3vw, 30px);
             position: relative;
             z-index: 1;
         }
@@ -82,39 +81,38 @@
         /* Шапка */
         .header {
             text-align: center;
-            padding: 20px 15px;
+            padding: clamp(15px, 4vw, 40px);
             background: rgba(30, 40, 30, 0.8);
-            border-radius: 12px;
+            border-radius: clamp(10px, 2vw, 20px);
             border: 2px solid #b8860b;
-            margin-bottom: 20px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            margin-bottom: clamp(15px, 3vw, 30px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(5px);
             position: relative;
             overflow: hidden;
         }
 
-        .header::before {
-            content: "⚔️";
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 30px;
-            opacity: 0.2;
-        }
-
+        .header::before,
         .header::after {
             content: "⚔️";
             position: absolute;
-            right: 10px;
             top: 50%;
-            transform: translateY(-50%) scaleX(-1);
-            font-size: 30px;
+            transform: translateY(-50%);
+            font-size: clamp(30px, 6vw, 50px);
             opacity: 0.2;
         }
 
+        .header::before {
+            left: 10px;
+        }
+
+        .header::after {
+            right: 10px;
+            transform: translateY(-50%) scaleX(-1);
+        }
+
         h1 {
-            font-size: clamp(28px, 8vw, 42px);
+            font-size: clamp(28px, 8vw, 56px);
             text-transform: uppercase;
             letter-spacing: 2px;
             text-shadow: 2px 2px 0 #3a2a1a, 4px 4px 0 #b8860b;
@@ -125,7 +123,7 @@
         }
 
         h2 {
-            font-size: clamp(16px, 4vw, 22px);
+            font-size: clamp(16px, 4vw, 28px);
             color: #c0c0c0;
             text-shadow: 1px 1px 0 #2a3a2a;
         }
@@ -134,17 +132,17 @@
         .auth-section {
             display: flex;
             justify-content: flex-end;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: clamp(8px, 2vw, 15px);
+            margin-bottom: clamp(10px, 2vw, 20px);
         }
 
         .btn-auth {
-            padding: 10px 16px;
+            padding: clamp(8px, 2vw, 14px) clamp(12px, 3vw, 25px);
             background: linear-gradient(135deg, #3a5a3a, #1a3a1a);
             border: 2px solid #b8860b;
             color: #ffd700;
             font-weight: bold;
-            font-size: 14px;
+            font-size: clamp(12px, 2vw, 16px);
             text-transform: uppercase;
             letter-spacing: 1px;
             cursor: pointer;
@@ -154,33 +152,37 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        .btn-auth:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
         .btn-auth:active {
             transform: scale(0.95);
-            background: linear-gradient(135deg, #2a4a2a, #0a2a0a);
         }
 
         /* Форма отправки */
         .greeting-form {
             background: rgba(20, 30, 20, 0.9);
             border: 2px solid #b8860b;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
+            border-radius: clamp(10px, 2vw, 15px);
+            padding: clamp(15px, 4vw, 30px);
+            margin-bottom: clamp(15px, 3vw, 30px);
             backdrop-filter: blur(5px);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
         }
 
         .form-title {
-            font-size: 24px;
+            font-size: clamp(20px, 5vw, 32px);
             color: #ffd700;
-            margin-bottom: 20px;
+            margin-bottom: clamp(15px, 3vw, 25px);
             text-align: center;
             border-bottom: 2px solid #b8860b;
-            padding-bottom: 12px;
+            padding-bottom: clamp(10px, 2vw, 15px);
         }
 
         .form-group {
-            margin-bottom: 16px;
+            margin-bottom: clamp(12px, 2.5vw, 20px);
         }
 
         label {
@@ -189,18 +191,18 @@
             color: #c0c0c0;
             font-weight: bold;
             text-transform: uppercase;
-            font-size: 13px;
+            font-size: clamp(12px, 2vw, 14px);
             letter-spacing: 0.5px;
         }
 
         input, textarea {
             width: 100%;
-            padding: 14px;
+            padding: clamp(10px, 2.5vw, 15px);
             background: rgba(10, 20, 10, 0.8);
             border: 2px solid #5a7a5a;
             color: #e8d9b5;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: clamp(14px, 2.5vw, 16px);
             transition: all 0.3s;
             -webkit-appearance: none;
         }
@@ -208,11 +210,11 @@
         input:focus, textarea:focus {
             outline: none;
             border-color: #b8860b;
-            box-shadow: 0 0 10px rgba(184, 134, 11, 0.5);
+            box-shadow: 0 0 15px rgba(184, 134, 11, 0.5);
         }
 
         textarea {
-            min-height: 100px;
+            min-height: clamp(80px, 20vw, 120px);
             resize: vertical;
         }
 
@@ -220,8 +222,8 @@
             background: linear-gradient(135deg, #b8860b, #8b6508);
             color: #1a2a1a;
             font-weight: bold;
-            font-size: 18px;
-            padding: 16px 20px;
+            font-size: clamp(16px, 4vw, 22px);
+            padding: clamp(12px, 3vw, 18px) clamp(15px, 4vw, 30px);
             border: none;
             border-radius: 10px;
             cursor: pointer;
@@ -233,60 +235,70 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        .btn-submit:active {
-            transform: scale(0.98);
-            background: linear-gradient(135deg, #9a7008, #7a5508);
+        .btn-submit:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
         }
 
-        /* Панель модератора (СКРЫТА по умолчанию) */
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+        /* Панель модератора */
         .moderator-panel {
             background: rgba(10, 20, 10, 0.95);
             border: 3px solid #b8860b;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
-            display: none; /* Скрыта по умолчанию */
+            border-radius: clamp(10px, 2vw, 15px);
+            padding: clamp(15px, 4vw, 25px);
+            margin: clamp(15px, 3vw, 30px) 0;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+            display: none;
         }
 
         .moderator-panel.visible {
-            display: block; /* Показываем только модератору */
+            display: block;
         }
 
         .moderator-header {
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
             margin-bottom: 20px;
-            padding-bottom: 12px;
+            padding-bottom: 15px;
             border-bottom: 2px solid #b8860b;
         }
 
         .moderator-header h3 {
-            font-size: 22px;
+            font-size: clamp(18px, 4vw, 24px);
             color: #ffd700;
             text-transform: uppercase;
-            text-align: center;
         }
 
         .moderator-email {
             color: #ffd700;
-            font-size: 14px;
+            font-size: clamp(12px, 2.5vw, 14px);
             background: rgba(0, 0, 0, 0.3);
-            padding: 8px 12px;
+            padding: clamp(6px, 1.5vw, 10px) clamp(10px, 2vw, 15px);
             border-radius: 20px;
             border: 1px solid #b8860b;
-            text-align: center;
             word-break: break-all;
         }
 
         /* Карточки для модерации */
+        #pendingGreetings {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
         .greeting-card {
             background: rgba(30, 40, 30, 0.8);
             border: 2px solid #5a7a5a;
             border-radius: 10px;
-            padding: 16px;
-            margin-bottom: 16px;
+            padding: clamp(12px, 3vw, 20px);
             transition: all 0.3s;
         }
 
@@ -296,7 +308,7 @@
         }
 
         .greeting-card h4 {
-            font-size: 18px;
+            font-size: clamp(16px, 3.5vw, 20px);
             color: #ffd700;
             margin-bottom: 8px;
             word-break: break-word;
@@ -304,18 +316,19 @@
 
         .greeting-meta {
             display: flex;
-            flex-direction: column;
-            gap: 5px;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 15px;
             color: #a0a0a0;
-            font-size: 13px;
-            margin-bottom: 8px;
+            font-size: clamp(12px, 2.5vw, 14px);
+            margin-bottom: 10px;
         }
 
         .greeting-text {
-            font-size: 16px;
-            margin: 12px 0;
-            line-height: 1.5;
-            padding: 12px;
+            font-size: clamp(14px, 3vw, 18px);
+            margin: 15px 0;
+            line-height: 1.6;
+            padding: clamp(10px, 2.5vw, 15px);
             background: rgba(0, 0, 0, 0.3);
             border-radius: 8px;
             font-style: italic;
@@ -325,13 +338,14 @@
 
         .moderator-actions {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
+            flex-wrap: wrap;
             gap: 10px;
             margin-top: 15px;
         }
 
         .btn-moderate {
-            padding: 14px;
+            padding: clamp(10px, 2.5vw, 14px) clamp(15px, 3vw, 25px);
             border: none;
             border-radius: 8px;
             cursor: pointer;
@@ -339,9 +353,15 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             transition: all 0.3s;
-            font-size: 16px;
-            width: 100%;
+            font-size: clamp(13px, 2.5vw, 16px);
+            flex: 1 1 auto;
+            min-width: 120px;
             -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn-moderate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
         .btn-moderate:active {
@@ -358,21 +378,55 @@
             color: white;
         }
 
-        /* Одобренные поздравления */
+        /* Одобренные поздравления - СЕТКА для ПК */
         .approved-greetings {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: clamp(12px, 3vw, 25px);
             margin-top: 20px;
+        }
+
+        /* Для маленьких экранов - 1 колонка */
+        @media (max-width: 640px) {
+            .approved-greetings {
+                grid-template-columns: 1fr;
+            }
+            
+            .moderator-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .moderator-actions {
+                flex-direction: column;
+            }
+            
+            .btn-moderate {
+                width: 100%;
+            }
+        }
+
+        /* Для средних экранов - 2 колонки */
+        @media (min-width: 641px) and (max-width: 1024px) {
+            .approved-greetings {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         .approved-card {
             background: rgba(30, 40, 30, 0.9);
             border: 2px solid #b8860b;
             border-radius: 12px;
-            padding: 20px;
+            padding: clamp(15px, 3vw, 25px);
             transition: all 0.3s;
             animation: fadeIn 0.5s;
+            height: fit-content;
+        }
+
+        .approved-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-color: #ffd700;
         }
 
         .approved-card:active {
@@ -380,7 +434,7 @@
         }
 
         .approved-card h4 {
-            font-size: 20px;
+            font-size: clamp(16px, 3.5vw, 22px);
             color: #ffd700;
             margin-bottom: 12px;
             border-bottom: 1px solid #b8860b;
@@ -389,8 +443,8 @@
         }
 
         .approved-card .greeting-text {
-            font-size: 16px;
-            line-height: 1.5;
+            font-size: clamp(14px, 3vw, 18px);
+            line-height: 1.6;
             color: #e8d9b5;
             margin: 12px 0;
             padding: 10px;
@@ -404,7 +458,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Модальное окно входа */
+        /* Модальное окно */
         .modal {
             display: none;
             position: fixed;
@@ -427,17 +481,17 @@
             background: linear-gradient(135deg, #1a2a1a, #0a1a0a);
             border: 3px solid #b8860b;
             border-radius: 16px;
-            padding: 25px 20px;
-            max-width: 400px;
+            padding: clamp(20px, 5vw, 40px);
+            max-width: 450px;
             width: 100%;
             position: relative;
         }
 
         .close-modal {
             position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 30px;
+            top: 10px;
+            right: 15px;
+            font-size: clamp(24px, 5vw, 36px);
             cursor: pointer;
             color: #b8860b;
             width: 40px;
@@ -448,9 +502,13 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        .close-modal:hover {
+            color: #ffd700;
+        }
+
         .modal h3 {
             color: #ffd700;
-            font-size: 22px;
+            font-size: clamp(18px, 4vw, 26px);
             margin-bottom: 20px;
             text-align: center;
         }
@@ -461,7 +519,7 @@
             border-radius: 8px;
             text-align: center;
             font-weight: bold;
-            font-size: 14px;
+            font-size: clamp(12px, 2.5vw, 14px);
         }
 
         .status-message.success {
@@ -480,7 +538,9 @@
             top: 20px;
             right: 20px;
             left: 20px;
-            padding: 15px;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: clamp(12px, 3vw, 18px);
             background: linear-gradient(135deg, #1a2a1a, #0a1a0a);
             border: 2px solid #b8860b;
             border-radius: 10px;
@@ -490,7 +550,7 @@
             animation: slideIn 0.3s ease;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
             text-align: center;
-            font-size: 14px;
+            font-size: clamp(13px, 2.5vw, 16px);
         }
 
         @keyframes slideIn {
@@ -501,26 +561,25 @@
         /* Подвал */
         .footer {
             text-align: center;
-            padding: 20px 10px;
-            margin-top: 30px;
+            padding: clamp(15px, 4vw, 30px) clamp(10px, 3vw, 20px);
+            margin-top: 40px;
             color: #808080;
             border-top: 1px solid #b8860b;
-            font-size: 14px;
+            font-size: clamp(12px, 2.5vw, 14px);
         }
 
-        /* Индикатор загрузки */
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: #808080;
-        }
-
-        /* Пустые состояния */
-        .empty-state {
+        /* Состояния загрузки */
+        .loading, .empty-state {
             text-align: center;
             padding: 30px 20px;
             color: #808080;
             font-style: italic;
+            grid-column: 1 / -1;
+        }
+
+        /* Отладка (скрыта) */
+        .debug-info {
+            display: none;
         }
     </style>
 </head>
@@ -562,12 +621,12 @@
         </div>
 
         <!-- Одобренные поздравления -->
-        <h2 style="margin: 30px 0 15px; text-align: center;">Одобренные поздравления</h2>
+        <h2 style="margin: 30px 0 20px; text-align: center;">Одобренные поздравления</h2>
         <div class="approved-greetings" id="approvedGreetings">
             <div class="loading">Загрузка...</div>
         </div>
 
-        <!-- Панель модератора (видна ТОЛЬКО после входа) -->
+        <!-- Панель модератора (только для модератора) -->
         <div class="moderator-panel" id="moderatorPanel">
             <div class="moderator-header">
                 <h3>⚡ Панель модератора ⚡</h3>
@@ -590,7 +649,7 @@
                         <label>Пароль</label>
                         <input type="password" id="loginPassword" required placeholder="••••••••">
                     </div>
-                    <button type="submit" class="btn-submit" style="font-size: 16px; padding: 14px;">Войти</button>
+                    <button type="submit" class="btn-submit" style="font-size: clamp(14px, 3vw, 18px);">Войти</button>
                 </form>
                 <div id="loginStatus" class="status-message"></div>
             </div>
@@ -632,7 +691,7 @@
             }, 3000);
         }
 
-        // Отслеживание состояния авторизации
+        // Отслеживание авторизации
         auth.onAuthStateChanged((user) => {
             currentUser = user;
             const moderatorPanel = document.getElementById('moderatorPanel');
@@ -640,7 +699,6 @@
             const logoutBtn = document.getElementById('logoutBtn');
             
             if (user) {
-                // Показываем панель модератора ТОЛЬКО для авторизованных
                 document.getElementById('moderatorEmail').textContent = user.email;
                 moderatorPanel.classList.add('visible');
                 loginBtn.style.display = 'none';
@@ -648,14 +706,13 @@
                 loadPendingGreetings();
                 showNotification('Добро пожаловать, модератор!', 'success');
             } else {
-                // Скрываем панель модератора для всех остальных
                 moderatorPanel.classList.remove('visible');
                 loginBtn.style.display = 'inline-block';
                 logoutBtn.style.display = 'none';
             }
         });
 
-        // Загрузка одобренных поздравлений
+        // Загрузка одобренных
         async function loadApprovedGreetings() {
             try {
                 const snapshot = await db.collection('greetings')
@@ -670,7 +727,6 @@
                     return;
                 }
                 
-                // Сортируем вручную
                 const greetings = [];
                 snapshot.forEach(doc => {
                     greetings.push({ id: doc.id, ...doc.data() });
@@ -717,7 +773,7 @@
             }
         }
 
-        // Загрузка ожидающих модерации (ТОЛЬКО для модератора)
+        // Загрузка ожидающих (только для модератора)
         async function loadPendingGreetings() {
             if (!currentUser) return;
             
@@ -815,7 +871,7 @@
             }
         }
 
-        // Отправка нового поздравления
+        // Отправка
         document.getElementById('greetingForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -918,9 +974,4 @@
 
         // Экспорт функций
         window.showLoginModal = showLoginModal;
-        window.hideLoginModal = hideLoginModal;
-        window.logout = logout;
-        window.moderateGreeting = moderateGreeting;
-    </script>
-</body>
-</html>
+        window.h
