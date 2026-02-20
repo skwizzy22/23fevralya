@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>С 23 февраля | Защитникам Отечества</title>
+    <!-- Firebase SDK (Compat версия) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -11,7 +16,6 @@
             box-sizing: border-box;
         }
 
-        /* Военная цветовая схема */
         :root {
             --army-green: #2b4b2b;
             --army-dark: #1a2f1a;
@@ -34,7 +38,6 @@
             overflow-x: hidden;
         }
 
-        /* Камуфляжный фон */
         body::before {
             content: '';
             position: fixed;
@@ -55,7 +58,6 @@
             z-index: -1;
         }
 
-        /* Военный хедер */
         header {
             background: linear-gradient(135deg, var(--army-dark) 0%, var(--army-green) 100%);
             color: var(--gold);
@@ -80,13 +82,7 @@
             gap: 15px;
         }
 
-        header h1::before {
-            content: '⭐';
-            font-size: 2.2rem;
-            filter: drop-shadow(0 0 5px var(--gold));
-        }
-
-        header h1::after {
+        header h1::before, header h1::after {
             content: '⭐';
             font-size: 2.2rem;
             filter: drop-shadow(0 0 5px var(--gold));
@@ -98,10 +94,9 @@
         }
 
         nav a {
-            color: var(--e8e0c9);
+            color: #e8e0c9;
             text-decoration: none;
             padding: 8px 25px;
-            border-radius: 0;
             transition: all 0.3s ease;
             cursor: pointer;
             font-weight: 600;
@@ -130,19 +125,16 @@
             padding: 0 20px;
         }
 
-        /* Военные секции */
         section {
             background: rgba(26, 47, 26, 0.9);
             backdrop-filter: blur(5px);
             border: 2px solid var(--gold);
-            border-radius: 0;
             padding: 2.5rem;
             margin-bottom: 2rem;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             position: relative;
         }
 
-        /* Уголки как на военных картах */
         section::before {
             content: '';
             position: absolute;
@@ -177,14 +169,6 @@
             display: inline-block;
         }
 
-        /* Военные звезды */
-        .military-star {
-            display: inline-block;
-            margin-left: 10px;
-            color: var(--gold);
-        }
-
-        /* Поле поиска */
         .search-section {
             background: linear-gradient(135deg, rgba(26, 47, 26, 0.95), rgba(43, 75, 43, 0.95));
             border-color: var(--gold);
@@ -196,10 +180,9 @@
             padding: 15px 25px;
             border: 2px solid var(--sand);
             background: rgba(0, 0, 0, 0.5);
-            color: var(--e8e0c9);
+            color: #e8e0c9;
             font-size: 1rem;
             transition: all 0.3s;
-            border-radius: 0;
         }
 
         .search-section input:focus {
@@ -208,12 +191,6 @@
             background: rgba(0, 0, 0, 0.7);
         }
 
-        .search-section input::placeholder {
-            color: var(--sand);
-            opacity: 0.7;
-        }
-
-        /* Военные кнопки */
         button {
             background: transparent;
             color: var(--gold);
@@ -227,7 +204,6 @@
             letter-spacing: 2px;
             position: relative;
             overflow: hidden;
-            border-radius: 0;
         }
 
         button:hover {
@@ -236,11 +212,6 @@
             box-shadow: 0 0 20px var(--gold);
         }
 
-        button:active {
-            transform: scale(0.98);
-        }
-
-        /* Формы */
         .form-group {
             margin-bottom: 2rem;
         }
@@ -260,10 +231,9 @@
             padding: 15px 20px;
             border: 2px solid var(--sand);
             background: rgba(0, 0, 0, 0.5);
-            color: var(--e8e0c9);
+            color: #e8e0c9;
             font-size: 1rem;
             transition: all 0.3s;
-            border-radius: 0;
         }
 
         .form-group input:focus, .form-group textarea:focus {
@@ -272,7 +242,6 @@
             background: rgba(0, 0, 0, 0.7);
         }
 
-        /* Карточки поздравлений */
         .greeting-card {
             background: linear-gradient(135deg, var(--army-dark), var(--army-green));
             border: 2px solid var(--gold);
@@ -312,10 +281,9 @@
             font-size: 1.1rem;
             line-height: 1.6;
             border-left: 4px solid var(--gold);
-            color: var(--e8e0c9);
+            color: #e8e0c9;
         }
 
-        /* Модальное окно для входа */
         .modal {
             display: none;
             position: fixed;
@@ -357,7 +325,7 @@
             margin-bottom: 1.5rem;
             background: rgba(0, 0, 0, 0.5);
             border: 2px solid var(--sand);
-            color: var(--e8e0c9);
+            color: #e8e0c9;
             font-size: 1rem;
         }
 
@@ -372,7 +340,6 @@
             display: none;
         }
 
-        /* Панель модерации (видна только после входа) */
         .moderation-section {
             border-color: var(--blood);
         }
@@ -393,16 +360,12 @@
         .moderation-item p {
             margin: 0.8rem 0;
             font-size: 1.1rem;
-            color: var(--e8e0c9);
+            color: #e8e0c9;
         }
 
         .moderation-item strong {
             color: var(--blood);
             font-weight: 600;
-        }
-
-        .moderation-item small {
-            color: var(--sand);
         }
 
         .actions {
@@ -436,7 +399,6 @@
             color: var(--gold);
         }
 
-        /* Военная тематика для пустых состояний */
         .empty-state {
             text-align: center;
             padding: 4rem 2rem;
@@ -489,7 +451,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Сетка результатов */
         .results-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -510,7 +471,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* Адаптивность */
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
@@ -549,7 +509,6 @@
             }
         }
 
-        /* Секретная кнопка для входа в модерацию */
         .secret-entry {
             position: fixed;
             bottom: 20px;
@@ -578,7 +537,6 @@
             font-size: 1.5rem;
         }
 
-        /* Кнопка выхода */
         .logout-btn {
             background: transparent;
             border-color: var(--blood);
@@ -592,27 +550,34 @@
             background: var(--blood);
             color: var(--gold);
         }
+
+        .user-email {
+            color: var(--gold);
+            margin-right: 15px;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>23 февраля</h1>
+        <h1>23 ФЕВРАЛЯ</h1>
         <nav>
             <a onclick="showPage('main')" id="nav-main" class="active">ГЛАВНАЯ</a>
             <a onclick="showModerationLogin()" id="nav-admin">ШТАБ</a>
         </nav>
     </header>
 
-    <!-- Секретный вход в модерацию -->
+    <!-- Секретный вход -->
     <div class="secret-entry" onclick="showModerationLogin()" title="Вход для командования"></div>
 
-    <!-- Модальное окно для входа в модерацию -->
+    <!-- Модальное окно для входа -->
     <div id="login-modal" class="modal">
         <div class="modal-content">
-            <h2>ДОСТУП К ШТАБУ</h2>
-            <input type="password" id="admin-password" placeholder="Введите пароль" onkeypress="if(event.key==='Enter') checkAdminPassword()">
-            <button onclick="checkAdminPassword()">ВОЙТИ</button>
-            <div id="login-error" class="error-message">Неверный пароль!</div>
+            <h2>ВХОД В ШТАБ</h2>
+            <input type="email" id="admin-email" placeholder="Email" value="vadaiat4@gmail.com">
+            <input type="password" id="admin-password" placeholder="Пароль" onkeypress="if(event.key==='Enter') loginWithEmail()">
+            <button onclick="loginWithEmail()">ВОЙТИ</button>
+            <div id="login-error" class="error-message"></div>
         </div>
     </div>
 
@@ -620,15 +585,13 @@
         <!-- Главная страница -->
         <div id="main-page" class="page">
             <section class="search-section">
-                <h2>НАЙТИ ЗАЩИТНИКА <span class="military-star">⭐</span></h2>
+                <h2>НАЙТИ ЗАЩИТНИКА ⭐</h2>
                 <input type="text" id="search-name" placeholder="Введите имя бойца..." autocomplete="off">
-                <button onclick="searchGreetings()">
-                    <span>🔍</span> НАЙТИ
-                </button>
+                <button onclick="searchGreetings()">🔍 НАЙТИ</button>
             </section>
 
             <section class="create-section">
-                <h2>ДОБАВИТЬ ПОЗДРАВЛЕНИЕ <span class="military-star">⭐</span></h2>
+                <h2>ДОБАВИТЬ ПОЗДРАВЛЕНИЕ ⭐</h2>
                 <form id="greeting-form" onsubmit="event.preventDefault(); addGreeting();">
                     <div class="form-group">
                         <label for="from-name">ОТ КОГО (Позывной)</label>
@@ -642,24 +605,25 @@
                         <label for="message">ТЕКСТ ПОЗДРАВЛЕНИЯ</label>
                         <textarea id="message" rows="4" placeholder="Ваши пожелания..." required></textarea>
                     </div>
-                    <button type="submit">
-                        <span>📨</span> ОТПРАВИТЬ В ШТАБ
-                    </button>
+                    <button type="submit">📨 ОТПРАВИТЬ В ШТАБ</button>
                 </form>
             </section>
 
             <section class="results-section" id="results-section" style="display: none;">
-                <h2>РЕЗУЛЬТАТЫ ПОИСКА <span class="military-star">⭐</span></h2>
+                <h2>РЕЗУЛЬТАТЫ ПОИСКА ⭐</h2>
                 <div id="results-container" class="results-grid"></div>
             </section>
         </div>
 
-        <!-- Страница модерации (доступна только после входа) -->
+        <!-- Страница модерации -->
         <div id="admin-page" class="page hidden">
             <section class="moderation-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
                     <h2>ЗАЯВКИ НА ПРОВЕРКУ</h2>
-                    <button class="logout-btn" onclick="logoutFromModeration()">ВЫХОД</button>
+                    <div>
+                        <span class="user-email" id="user-email"></span>
+                        <button class="logout-btn" onclick="logout()">ВЫХОД</button>
+                    </div>
                 </div>
                 <div id="moderation-list">
                     <p class="loading">ЗАГРУЗКА ДАННЫХ</p>
@@ -669,47 +633,86 @@
     </main>
 
     <script>
-        // Константы для localStorage
-        const STORAGE_KEYS = {
-            PENDING: 'feb23_pending',
-            APPROVED: 'feb23_approved'
+        // ✅ НОВЫЕ ПРАВИЛЬНЫЕ ДАННЫЕ FIREBASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyBdmfKkLzGC_bx8F_0gNvHHzSWpZbKAk3YU",
+            authDomain: "new-fad3e.firebaseapp.com",
+            projectId: "new-fad3e",
+            storageBucket: "new-fad3e.firebasestorage.app",
+            messagingSenderId: "618276712332",
+            appId: "1:618276712332:web:a1c54d2c8b653cada3f0a9"
         };
 
-        // Пароль для доступа к модерации (можно изменить на свой)
-        const ADMIN_PASSWORD = 'Trivial';
+        // Инициализация Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
-        // Флаг авторизации
+        // Состояние авторизации
         let isAuthenticated = false;
+        
+        // ВАШ USER UID (нужно будет заменить после создания пользователя)
+        let ADMIN_UID = "";
 
-        // Инициализация при загрузке
-        document.addEventListener('DOMContentLoaded', function() {
-            initStorage();
+        // Проверка авторизации при загрузке
+        auth.onAuthStateChanged((user) => {
+            console.log("Auth state changed:", user ? user.email : "No user");
+            if (user) {
+                // Если это первый вход - сохраняем UID
+                if (!ADMIN_UID) {
+                    ADMIN_UID = user.uid;
+                    console.log("Admin UID set to:", ADMIN_UID);
+                }
+                
+                if (user.uid === ADMIN_UID) {
+                    isAuthenticated = true;
+                    document.getElementById('user-email').textContent = user.email;
+                    if (!document.getElementById('admin-page').classList.contains('hidden')) {
+                        loadModerationRequests();
+                    }
+                } else {
+                    isAuthenticated = false;
+                    auth.signOut();
+                }
+            } else {
+                isAuthenticated = false;
+                if (!document.getElementById('admin-page').classList.contains('hidden')) {
+                    showPage('main');
+                }
+            }
         });
 
-        // Показать окно входа в модерацию
+        // Показать окно входа
         function showModerationLogin() {
-            document.getElementById('login-modal').classList.add('active');
-            document.getElementById('admin-password').value = '';
-            document.getElementById('login-error').style.display = 'none';
-        }
-
-        // Проверка пароля
-        function checkAdminPassword() {
-            const password = document.getElementById('admin-password').value;
-            
-            if (password === ADMIN_PASSWORD) {
-                document.getElementById('login-modal').classList.remove('active');
-                isAuthenticated = true;
+            if (isAuthenticated) {
                 showPage('admin');
-                updateModerationList();
             } else {
-                document.getElementById('login-error').style.display = 'block';
+                document.getElementById('login-modal').classList.add('active');
+                document.getElementById('admin-password').value = '';
+                document.getElementById('login-error').style.display = 'none';
             }
         }
 
-        // Выход из модерации
-        function logoutFromModeration() {
-            isAuthenticated = false;
+        // Вход по email/паролю
+        async function loginWithEmail() {
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+
+            try {
+                console.log("Attempting login...");
+                await auth.signInWithEmailAndPassword(email, password);
+                document.getElementById('login-modal').classList.remove('active');
+                console.log("Login successful");
+            } catch (error) {
+                console.error("Login error:", error);
+                document.getElementById('login-error').style.display = 'block';
+                document.getElementById('login-error').textContent = 'Ошибка входа: ' + error.message;
+            }
+        }
+
+        // Выход
+        async function logout() {
+            await auth.signOut();
             showPage('main');
         }
 
@@ -734,63 +737,64 @@
                 adminPage.classList.remove('hidden');
                 navMain.classList.remove('active');
                 navAdmin.classList.add('active');
+                loadModerationRequests();
             }
         }
 
-        // Инициализация хранилища
-        function initStorage() {
-            if (!localStorage.getItem(STORAGE_KEYS.PENDING)) {
-                localStorage.setItem(STORAGE_KEYS.PENDING, JSON.stringify([]));
+        // Загрузка заявок из Firestore
+        async function loadModerationRequests() {
+            const container = document.getElementById('moderation-list');
+            
+            if (!isAuthenticated) {
+                container.innerHTML = '<div class="empty-state">Требуется авторизация</div>';
+                return;
             }
-            if (!localStorage.getItem(STORAGE_KEYS.APPROVED)) {
-                // Добавляем тестовые данные
-                const testData = [
-                    {
-                        id: '1',
-                        from: 'Товарищи',
-                        to: 'Алексей',
-                        message: 'С 23 февраля! Желаем крепкого здоровья, мужества и успехов в службе!',
-                        approved: true,
-                        timestamp: new Date().toISOString()
-                    },
-                    {
-                        id: '2',
-                        from: 'Семья',
-                        to: 'Дмитрий',
-                        message: 'С праздником, наш защитник! Мирного неба над головой!',
-                        approved: true,
-                        timestamp: new Date().toISOString()
-                    }
-                ];
-                localStorage.setItem(STORAGE_KEYS.APPROVED, JSON.stringify(testData));
+
+            try {
+                const snapshot = await db.collection('pending')
+                    .orderBy('timestamp', 'desc')
+                    .get();
+                
+                if (snapshot.empty) {
+                    container.innerHTML = '<div class="empty-state">Новых заявок нет</div>';
+                    return;
+                }
+
+                let html = '';
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const date = data.timestamp?.toDate 
+                        ? data.timestamp.toDate().toLocaleString('ru-RU')
+                        : 'Дата неизвестна';
+                    
+                    html += `
+                        <div class="moderation-item">
+                            <p><strong>От:</strong> ${escapeHtml(data.from)}</p>
+                            <p><strong>Кому:</strong> ${escapeHtml(data.to)}</p>
+                            <p><strong>Поздравление:</strong></p>
+                            <p class="message">${escapeHtml(data.message)}</p>
+                            <p><small>${date}</small></p>
+                            <div class="actions">
+                                <button class="approve" onclick="approveGreeting('${doc.id}')">
+                                    ✅ ОДОБРИТЬ
+                                </button>
+                                <button class="reject" onclick="rejectGreeting('${doc.id}')">
+                                    ❌ ОТКЛОНИТЬ
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+            } catch (error) {
+                console.error("Firestore error:", error);
+                container.innerHTML = `<div class="empty-state">Ошибка загрузки: ${error.message}</div>`;
             }
-        }
-
-        // Получение данных из хранилища
-        function getPendingGreetings() {
-            return JSON.parse(localStorage.getItem(STORAGE_KEYS.PENDING)) || [];
-        }
-
-        function getApprovedGreetings() {
-            return JSON.parse(localStorage.getItem(STORAGE_KEYS.APPROVED)) || [];
-        }
-
-        // Сохранение данных
-        function savePendingGreetings(greetings) {
-            localStorage.setItem(STORAGE_KEYS.PENDING, JSON.stringify(greetings));
-        }
-
-        function saveApprovedGreetings(greetings) {
-            localStorage.setItem(STORAGE_KEYS.APPROVED, JSON.stringify(greetings));
-        }
-
-        // Генерация уникального ID
-        function generateId() {
-            return Date.now() + '-' + Math.random().toString(36).substr(2, 9);
         }
 
         // Добавление новой заявки
-        function addGreeting() {
+        async function addGreeting() {
             const from = document.getElementById('from-name').value;
             const to = document.getElementById('to-name').value;
             const message = document.getElementById('message').value;
@@ -800,94 +804,64 @@
                 return;
             }
 
-            const pending = getPendingGreetings();
-            const newGreeting = {
-                id: generateId(),
-                from: from.trim(),
-                to: to.trim(),
-                message: message.trim(),
-                timestamp: new Date().toISOString()
-            };
-            pending.push(newGreeting);
-            savePendingGreetings(pending);
-            
-            alert('Поздравление отправлено в штаб на проверку!');
-            document.getElementById('greeting-form').reset();
+            try {
+                await db.collection('pending').add({
+                    from: from.trim(),
+                    to: to.trim(),
+                    message: message.trim(),
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                alert('Поздравление отправлено в штаб на проверку!');
+                document.getElementById('greeting-form').reset();
+            } catch (error) {
+                console.error("Add greeting error:", error);
+                alert('Ошибка: ' + error.message);
+            }
         }
 
         // Одобрение заявки
-        function approveGreeting(id) {
+        async function approveGreeting(id) {
             if (!isAuthenticated) return;
-            
-            const pending = getPendingGreetings();
-            const approved = getApprovedGreetings();
-            
-            const index = pending.findIndex(g => g.id === id);
-            if (index !== -1) {
-                const greeting = pending[index];
-                greeting.approved = true;
-                approved.push(greeting);
-                pending.splice(index, 1);
+
+            try {
+                const doc = await db.collection('pending').doc(id).get();
+                const data = doc.data();
                 
-                savePendingGreetings(pending);
-                saveApprovedGreetings(approved);
-                updateModerationList();
+                await db.collection('approved').add({
+                    ...data,
+                    approved: true,
+                    approvedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                await db.collection('pending').doc(id).delete();
+                
+                loadModerationRequests();
+                alert('Поздравление одобрено!');
+            } catch (error) {
+                console.error("Approve error:", error);
+                alert('Ошибка: ' + error.message);
             }
         }
 
         // Отклонение заявки
-        function rejectGreeting(id) {
+        async function rejectGreeting(id) {
             if (!isAuthenticated) return;
             
             if (confirm('Удалить эту заявку?')) {
-                const pending = getPendingGreetings();
-                const filtered = pending.filter(g => g.id !== id);
-                savePendingGreetings(filtered);
-                updateModerationList();
+                try {
+                    await db.collection('pending').doc(id).delete();
+                    loadModerationRequests();
+                    alert('Заявка отклонена');
+                } catch (error) {
+                    console.error("Reject error:", error);
+                    alert('Ошибка: ' + error.message);
+                }
             }
-        }
-
-        // Обновление списка модерации
-        function updateModerationList() {
-            if (!isAuthenticated) return;
-            
-            const container = document.getElementById('moderation-list');
-            const pending = getPendingGreetings();
-
-            if (pending.length === 0) {
-                container.innerHTML = '<div class="empty-state">Новых заявок нет</div>';
-                return;
-            }
-
-            let html = '';
-            pending.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-            
-            pending.forEach(greeting => {
-                const date = new Date(greeting.timestamp).toLocaleString('ru-RU');
-                html += `
-                    <div class="moderation-item">
-                        <p><strong>От:</strong> ${escapeHtml(greeting.from)}</p>
-                        <p><strong>Кому:</strong> ${escapeHtml(greeting.to)}</p>
-                        <p><strong>Поздравление:</strong></p>
-                        <p class="message">${escapeHtml(greeting.message)}</p>
-                        <p><small>${date}</small></p>
-                        <div class="actions">
-                            <button class="approve" onclick="approveGreeting('${greeting.id}')">
-                                <span>✅</span> ОДОБРИТЬ
-                            </button>
-                            <button class="reject" onclick="rejectGreeting('${greeting.id}')">
-                                <span>❌</span> ОТКЛОНИТЬ
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-
-            container.innerHTML = html;
         }
 
         // Поиск поздравлений
-        function searchGreetings() {
+        async function searchGreetings() {
             const searchName = document.getElementById('search-name').value.trim().toLowerCase();
             const resultsSection = document.getElementById('results-section');
             const resultsContainer = document.getElementById('results-container');
@@ -897,34 +871,45 @@
                 return;
             }
 
-            const approved = getApprovedGreetings();
-            const results = approved.filter(g => 
-                g.to.toLowerCase().includes(searchName)
-            );
-
-            if (results.length === 0) {
-                resultsContainer.innerHTML = `<div class="empty-state">Бойцов с именем "${searchName}" не найдено</div>`;
-            } else {
-                let html = '';
-                results.forEach(greeting => {
-                    html += `
-                        <div class="result-card">
-                            <div style="font-size: 2rem; margin-bottom: 1rem;">⭐</div>
-                            <h3 style="color: var(--gold); font-size: 1.5rem; margin-bottom: 0.5rem;">${escapeHtml(greeting.to)}</h3>
-                            <p style="color: var(--sand); margin-bottom: 1rem;">От: ${escapeHtml(greeting.from)}</p>
-                            <p style="font-style: italic; line-height: 1.6;">"${escapeHtml(greeting.message)}"</p>
-                        </div>
-                    `;
+            try {
+                const snapshot = await db.collection('approved').get();
+                const results = [];
+                
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    if (data.to && data.to.toLowerCase().includes(searchName)) {
+                        results.push(data);
+                    }
                 });
-                resultsContainer.innerHTML = html;
-            }
 
-            resultsSection.style.display = 'block';
-            resultsSection.scrollIntoView({ behavior: 'smooth' });
+                if (results.length === 0) {
+                    resultsContainer.innerHTML = `<div class="empty-state">Бойцов с именем "${searchName}" не найдено</div>`;
+                } else {
+                    let html = '';
+                    results.forEach(greeting => {
+                        html += `
+                            <div class="result-card">
+                                <div style="font-size: 2rem; margin-bottom: 1rem;">⭐</div>
+                                <h3 style="color: var(--gold); font-size: 1.5rem; margin-bottom: 0.5rem;">${escapeHtml(greeting.to)}</h3>
+                                <p style="color: var(--sand); margin-bottom: 1rem;">От: ${escapeHtml(greeting.from)}</p>
+                                <p style="font-style: italic; line-height: 1.6;">"${escapeHtml(greeting.message)}"</p>
+                            </div>
+                        `;
+                    });
+                    resultsContainer.innerHTML = html;
+                }
+
+                resultsSection.style.display = 'block';
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                console.error("Search error:", error);
+                alert('Ошибка поиска: ' + error.message);
+            }
         }
 
         // Защита от XSS
         function escapeHtml(text) {
+            if (!text) return '';
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
