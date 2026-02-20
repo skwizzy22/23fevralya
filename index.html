@@ -477,6 +477,18 @@
             border-radius: 20px;
             border: 1px solid #b8860b;
         }
+
+        .debug-info {
+            background: #1a1a1a;
+            color: #0f0;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            border: 1px solid #b8860b;
+        }
     </style>
 </head>
 <body>
@@ -494,7 +506,7 @@
             <h2>Слава защитникам Отечества!</h2>
         </div>
 
-        <!-- Форма отправки поздравления - БЕЗ ВОИНСКИХ ЗВАНИЙ -->
+        <!-- Форма отправки поздравления -->
         <div class="greeting-form">
             <div class="form-title">Отправить поздравление</div>
             <form id="greetingForm">
@@ -527,6 +539,7 @@
                 <span class="moderator-email" id="moderatorEmail"></span>
             </div>
             <div id="pendingGreetings"></div>
+            <div id="debugInfo" class="debug-info"></div>
         </div>
 
         <!-- Модальное окно входа -->
@@ -569,8 +582,23 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
+        
+        // Отключаем требование индексов для тестирования (временно)
+        db.useEmulator ? null : null;
 
         let currentUser = null;
+
+        // Функция для отладки
+        function debug(message, data = null) {
+            console.log(message, data || '');
+            const debugDiv = document.getElementById('debugInfo');
+            if (debugDiv) {
+                const timestamp = new Date().toLocaleTimeString();
+                let dataStr = data ? JSON.stringify(data, null, 2).substring(0, 200) : '';
+                debugDiv.innerHTML += `[${timestamp}] ${message} ${dataStr}<br>`;
+                debugDiv.scrollTop = debugDiv.scrollHeight;
+            }
+        }
 
         // Показать уведомление
         function showNotification(message, type = 'info') {
@@ -587,6 +615,7 @@
 
         // Отслеживание состояния авторизации
         auth.onAuthStateChanged((user) => {
+            debug('Состояние авторизации изменилось:', user ? user.email : 'не авторизован');
             currentUser = user;
             const moderatorPanel = document.getElementById('moderatorPanel');
             const logoutBtn = document.getElementById('logoutBtn');
@@ -600,16 +629,21 @@
             } else {
                 moderatorPanel.style.display = 'none';
                 logoutBtn.style.display = 'none';
+                document.getElementById('debugInfo').innerHTML = ''; // Очищаем отладку при выходе
             }
         });
 
-        // Загрузка одобренных поздравлений
+        // Загрузка одобренных поздравлений - БЕЗ СОРТИРОВКИ
         async function loadApprovedGreetings() {
             try {
+                debug('Загрузка одобренных поздравлений...');
+                
+                // Убираем orderBy для избежания ошибок с индексами
                 const snapshot = await db.collection('greetings')
                     .where('status', '==', 'approved')
-                    .orderBy('createdAt', 'desc')
                     .get();
+                
+                debug('Получено одобренных:', snapshot.size);
                 
                 const container = document.getElementById('approvedGreetings');
                 container.innerHTML = '';
@@ -619,8 +653,20 @@
                     return;
                 }
                 
+                // Преобразуем в массив и сортируем вручную по дате
+                const greetings = [];
                 snapshot.forEach(doc => {
-                    const data = doc.data();
+                    greetings.push({ id: doc.id, ...doc.data() });
+                });
+                
+                // Сортируем по дате создания (новые сверху)
+                greetings.sort((a, b) => {
+                    const dateA = a.createdAt ? a.createdAt.toDate() : new Date(0);
+                    const dateB = b.createdAt ? b.createdAt.toDate() : new Date(0);
+                    return dateB - dateA;
+                });
+                
+                greetings.forEach(data => {
                     const card = document.createElement('div');
                     card.className = 'approved-card';
                     
@@ -635,7 +681,7 @@
                                 minute: '2-digit' 
                             });
                         } catch (e) {
-                            console.error('Ошибка форматирования даты:', e);
+                            debug('Ошибка форматирования даты:', e);
                         }
                     }
                     
@@ -650,22 +696,32 @@
                     container.appendChild(card);
                 });
                 
+                debug(`Отображено ${greetings.length} одобренных поздравлений`);
+                
             } catch (error) {
                 console.error('Ошибка загрузки одобренных:', error);
+                debug('ОШИБКА загрузки одобренных:', error.message);
                 document.getElementById('approvedGreetings').innerHTML = 
-                    '<p style="color: #c62828; grid-column: 1/-1;">Ошибка загрузки поздравлений</p>';
+                    `<p style="color: #c62828; grid-column: 1/-1;">Ошибка загрузки: ${error.message}</p>`;
             }
         }
 
-        // Загрузка ожидающих модерации
+        // Загрузка ожидающих модерации - БЕЗ СОРТИРОВКИ
         async function loadPendingGreetings() {
-            if (!currentUser) return;
+            if (!currentUser) {
+                debug('Загрузка заявок: пользователь не авторизован');
+                return;
+            }
             
             try {
+                debug('Загрузка ожидающих модерации...');
+                
+                // Убираем orderBy для избежания ошибок с индексами
                 const snapshot = await db.collection('greetings')
                     .where('status', '==', 'pending')
-                    .orderBy('createdAt', 'desc')
                     .get();
+                
+                debug('Получено заявок:', snapshot.size);
                 
                 const container = document.getElementById('pendingGreetings');
                 container.innerHTML = '<h4 style="margin-bottom: 20px; color: #ffd700;">Ожидают модерации:</h4>';
@@ -675,11 +731,27 @@
                     return;
                 }
                 
+                // Преобразуем в массив и сортируем вручную
+                const greetings = [];
                 snapshot.forEach(doc => {
-                    const data = doc.data();
+                    greetings.push({ 
+                        id: doc.id, 
+                        data: doc.data()
+                    });
+                });
+                
+                // Сортируем по дате создания (новые сверху)
+                greetings.sort((a, b) => {
+                    const dateA = a.data.createdAt ? a.data.createdAt.toDate() : new Date(0);
+                    const dateB = b.data.createdAt ? b.data.createdAt.toDate() : new Date(0);
+                    return dateB - dateA;
+                });
+                
+                greetings.forEach(item => {
+                    const data = item.data;
                     const card = document.createElement('div');
                     card.className = 'greeting-card pending';
-                    card.id = `greeting-${doc.id}`;
+                    card.id = `greeting-${item.id}`;
                     
                     let dateText = 'Только что';
                     if (data.createdAt) {
@@ -692,7 +764,7 @@
                                 minute: '2-digit' 
                             });
                         } catch (e) {
-                            console.error('Ошибка форматирования даты:', e);
+                            debug('Ошибка форматирования даты:', e);
                         }
                     }
                     
@@ -704,17 +776,20 @@
                         </div>
                         <div class="greeting-text">${data.text || 'Нет текста'}</div>
                         <div class="moderator-actions">
-                            <button class="btn-moderate btn-approve" onclick="moderateGreeting('${doc.id}', 'approved')">✅ Одобрить</button>
-                            <button class="btn-moderate btn-reject" onclick="moderateGreeting('${doc.id}', 'rejected')">❌ Отклонить</button>
+                            <button class="btn-moderate btn-approve" onclick="moderateGreeting('${item.id}', 'approved')">✅ Одобрить</button>
+                            <button class="btn-moderate btn-reject" onclick="moderateGreeting('${item.id}', 'rejected')">❌ Отклонить</button>
                         </div>
                     `;
                     container.appendChild(card);
                 });
                 
+                debug(`Отображено ${greetings.length} заявок на модерацию`);
+                
             } catch (error) {
                 console.error('Ошибка загрузки заявок:', error);
+                debug('ОШИБКА загрузки заявок:', error.message);
                 document.getElementById('pendingGreetings').innerHTML = 
-                    '<p style="color: #c62828;">Ошибка загрузки заявок</p>';
+                    `<p style="color: #c62828;">Ошибка загрузки: ${error.message}</p>`;
             }
         }
 
@@ -726,6 +801,8 @@
             }
             
             try {
+                debug(`Модерация ${id}: ${status}`);
+                
                 await db.collection('greetings').doc(id).update({
                     status: status,
                     moderatedBy: currentUser.email,
@@ -738,19 +815,14 @@
                 }
                 
                 await loadApprovedGreetings();
+                await loadPendingGreetings(); // Перезагружаем список заявок
                 
                 const statusText = status === 'approved' ? 'одобрено' : 'отклонено';
                 showNotification(`Поздравление ${statusText}!`, 'success');
                 
-                // Проверяем, остались ли заявки
-                const pendingContainer = document.getElementById('pendingGreetings');
-                const pendingCards = pendingContainer.querySelectorAll('.greeting-card');
-                if (pendingCards.length === 0) {
-                    pendingContainer.innerHTML = '<h4 style="margin-bottom: 20px; color: #ffd700;">Ожидают модерации:</h4><p style="color: #808080;">Нет новых заявок</p>';
-                }
-                
             } catch (error) {
                 console.error('Ошибка модерации:', error);
+                debug('ОШИБКА модерации:', error.message);
                 alert('Ошибка при модерации: ' + error.message);
             }
         }
@@ -781,14 +853,24 @@
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
                 
-                await db.collection('greetings').add(greetingData);
+                debug('Отправка данных:', greetingData);
+                
+                const docRef = await db.collection('greetings').add(greetingData);
+                
+                debug('Документ создан с ID:', docRef.id);
                 
                 alert('Поздравление отправлено на модерацию!');
                 e.target.reset();
                 showNotification('Поздравление отправлено!', 'success');
                 
+                // Если модератор сейчас онлайн, обновляем список заявок
+                if (currentUser) {
+                    loadPendingGreetings();
+                }
+                
             } catch (error) {
                 console.error('Ошибка отправки:', error);
+                debug('ОШИБКА отправки:', error.message);
                 alert('Ошибка при отправке: ' + error.message);
             } finally {
                 submitBtn.disabled = false;
@@ -809,6 +891,7 @@
             submitBtn.textContent = 'Вход...';
             
             try {
+                debug('Попытка входа:', email);
                 await auth.signInWithEmailAndPassword(email, password);
                 statusDiv.textContent = 'Успешный вход!';
                 statusDiv.className = 'status-message success';
@@ -817,6 +900,7 @@
                     statusDiv.textContent = '';
                 }, 1000);
             } catch (error) {
+                debug('Ошибка входа:', error.message);
                 statusDiv.textContent = 'Ошибка: ' + error.message;
                 statusDiv.className = 'status-message error';
             } finally {
@@ -830,6 +914,7 @@
             try {
                 await auth.signOut();
                 showNotification('Вы вышли из системы');
+                debug('Пользователь вышел');
             } catch (error) {
                 console.error('Ошибка выхода:', error);
             }
@@ -854,7 +939,13 @@
 
         // Загрузка данных при старте
         document.addEventListener('DOMContentLoaded', () => {
+            debug('Страница загружена, инициализация...');
             loadApprovedGreetings();
+            
+            // Проверка подключения к Firebase
+            db.collection('greetings').limit(1).get()
+                .then(() => debug('Подключение к Firebase работает'))
+                .catch(error => debug('Ошибка подключения к Firebase:', error.message));
         });
 
         // Экспорт функций
