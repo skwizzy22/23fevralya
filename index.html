@@ -633,7 +633,7 @@
     </main>
 
     <script>
-        // ✅ ВАШИ ПРАВИЛЬНЫЕ ДАННЫЕ ИЗ НОВОГО ПРОЕКТА
+        // НОВЫЕ ДАННЫЕ FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyBdmfKkLzGC_bx8F_0gNvHHzSWpZbKAk3YU",
             authDomain: "new-fad3e.firebaseapp.com",
@@ -648,30 +648,28 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // Состояние авторизации
-        let isAuthenticated = false;
-        
-        // ✅ ВАШ USER UID
+        // Данные администратора
         const ADMIN_UID = "aRoG4om1DMWdaRrVjVk85XeNsV63";
-        
-        // ✅ ВАША ПОЧТА
         const ADMIN_EMAIL = "vadaiat4@gmail.com";
 
-        // Проверка авторизации при загрузке
+        // Состояние авторизации
+        let isAuthenticated = false;
+
+        // Проверка авторизации
         auth.onAuthStateChanged((user) => {
-            console.log("Auth state changed:", user ? user.email : "No user");
-            if (user && (user.uid === ADMIN_UID || user.email === ADMIN_EMAIL)) {
-                isAuthenticated = true;
-                document.getElementById('user-email').textContent = user.email;
-                if (!document.getElementById('admin-page').classList.contains('hidden')) {
-                    loadModerationRequests();
+            if (user) {
+                if (user.uid === ADMIN_UID || user.email === ADMIN_EMAIL) {
+                    isAuthenticated = true;
+                    document.getElementById('user-email').textContent = user.email;
+                    if (!document.getElementById('admin-page').classList.contains('hidden')) {
+                        loadModerationRequests();
+                    }
+                } else {
+                    isAuthenticated = false;
+                    auth.signOut();
                 }
             } else {
                 isAuthenticated = false;
-                if (user) {
-                    console.log("User not admin, signing out");
-                    auth.signOut();
-                }
                 if (!document.getElementById('admin-page').classList.contains('hidden')) {
                     showPage('main');
                 }
@@ -689,18 +687,15 @@
             }
         }
 
-        // Вход по email/паролю
+        // Вход
         async function loginWithEmail() {
             const email = document.getElementById('admin-email').value;
             const password = document.getElementById('admin-password').value;
 
             try {
-                console.log("Attempting login...");
                 await auth.signInWithEmailAndPassword(email, password);
                 document.getElementById('login-modal').classList.remove('active');
-                console.log("Login successful");
             } catch (error) {
-                console.error("Login error:", error);
                 document.getElementById('login-error').style.display = 'block';
                 document.getElementById('login-error').textContent = 'Ошибка входа: ' + error.message;
             }
@@ -737,7 +732,7 @@
             }
         }
 
-        // Загрузка заявок из Firestore
+        // Загрузка заявок
         async function loadModerationRequests() {
             const container = document.getElementById('moderation-list');
             
@@ -771,12 +766,8 @@
                             <p class="message">${escapeHtml(data.message)}</p>
                             <p><small>${date}</small></p>
                             <div class="actions">
-                                <button class="approve" onclick="approveGreeting('${doc.id}')">
-                                    ✅ ОДОБРИТЬ
-                                </button>
-                                <button class="reject" onclick="rejectGreeting('${doc.id}')">
-                                    ❌ ОТКЛОНИТЬ
-                                </button>
+                                <button class="approve" onclick="approveGreeting('${doc.id}')">✅ ОДОБРИТЬ</button>
+                                <button class="reject" onclick="rejectGreeting('${doc.id}')">❌ ОТКЛОНИТЬ</button>
                             </div>
                         </div>
                     `;
@@ -784,12 +775,11 @@
 
                 container.innerHTML = html;
             } catch (error) {
-                console.error("Firestore error:", error);
                 container.innerHTML = `<div class="empty-state">Ошибка загрузки: ${error.message}</div>`;
             }
         }
 
-        // Добавление новой заявки
+        // Добавление поздравления
         async function addGreeting() {
             const from = document.getElementById('from-name').value;
             const to = document.getElementById('to-name').value;
@@ -811,12 +801,11 @@
                 alert('Поздравление отправлено в штаб на проверку!');
                 document.getElementById('greeting-form').reset();
             } catch (error) {
-                console.error("Add greeting error:", error);
                 alert('Ошибка: ' + error.message);
             }
         }
 
-        // Одобрение заявки
+        // Одобрение
         async function approveGreeting(id) {
             if (!isAuthenticated) return;
 
@@ -835,12 +824,11 @@
                 loadModerationRequests();
                 alert('Поздравление одобрено!');
             } catch (error) {
-                console.error("Approve error:", error);
                 alert('Ошибка: ' + error.message);
             }
         }
 
-        // Отклонение заявки
+        // Отклонение
         async function rejectGreeting(id) {
             if (!isAuthenticated) return;
             
@@ -850,13 +838,12 @@
                     loadModerationRequests();
                     alert('Заявка отклонена');
                 } catch (error) {
-                    console.error("Reject error:", error);
                     alert('Ошибка: ' + error.message);
                 }
             }
         }
 
-        // Поиск поздравлений
+        // Поиск
         async function searchGreetings() {
             const searchName = document.getElementById('search-name').value.trim().toLowerCase();
             const resultsSection = document.getElementById('results-section');
@@ -898,7 +885,6 @@
                 resultsSection.style.display = 'block';
                 resultsSection.scrollIntoView({ behavior: 'smooth' });
             } catch (error) {
-                console.error("Search error:", error);
                 alert('Ошибка поиска: ' + error.message);
             }
         }
